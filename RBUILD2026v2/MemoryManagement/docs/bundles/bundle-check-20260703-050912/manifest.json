@@ -1,0 +1,11 @@
+{
+  "schema": "glikch.session.bundle.v1",
+  "conversation_id": "bundle-check",
+  "created": "2026-07-03T05:09:12+00:00",
+  "human_transcript": "bundle-check-20260703-050912-human.txt",
+  "compact_memory": "bundle-check-20260703-050912-llm.json",
+  "images": [],
+  "logs": [
+    "logs/2026-07-03.log"
+  ]
+}

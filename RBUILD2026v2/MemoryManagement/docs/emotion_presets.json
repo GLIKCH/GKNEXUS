@@ -1,0 +1,16 @@
+{
+  "schema": "glikch.emotion.presets.v1",
+  "updated": "2026-07-03T09:07:23+00:00",
+  "presets": [
+    "What's up?",
+    "Hey! What's on your mind?",
+    "Did you drink water today?",
+    "How is Geoff and/or your friends and family doing today?",
+    "What's on your mind?",
+    "Have you done your school work?",
+    "Have you called your father or Mother today?",
+    "Have you checked your assignments?",
+    "Keep going Joel",
+    "Check your deadlines"
+  ]
+}

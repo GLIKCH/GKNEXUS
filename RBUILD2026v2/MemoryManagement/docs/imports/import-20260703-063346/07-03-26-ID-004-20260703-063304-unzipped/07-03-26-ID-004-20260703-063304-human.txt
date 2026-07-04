@@ -1,0 +1,10 @@
+Conversation: ChatTest004
+ID: 07-03-26-ID-004
+Model: google/gemma-4-e4b
+Created: 2026-07-03T06:31:00+00:00
+
+User (2026-07-03T06:30:57+00:00)
+hello this is another test! how are you?
+
+Assistant (2026-07-03T06:31:00+00:00)
+Hello! I'm doing well, thank you for asking. I hope you are having a good day!

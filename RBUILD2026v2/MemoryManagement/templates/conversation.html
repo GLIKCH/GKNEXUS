@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% if conv %}Edit {{ conv.id }}{% else %}New Conversation{% endif %}</title>
+    <style>
+      :root { color-scheme: dark; --bg: #070707; --panel: #11090a; --ink: #f4eaea; --muted: #b68f8f; --line: #3a1717; --accent: #d51f2a; --danger: #8f1c25; }
+      * { box-sizing: border-box; }
+      body { font-family: Arial, sans-serif; max-width: 1040px; margin: 0 auto; padding: 1.25rem; background: radial-gradient(circle at top left, #2a0709 0, var(--bg) 34rem); color: var(--ink); }
+      h1 { margin: 0 0 1rem; font-size: 1.2rem; }
+      form { border: 1px solid var(--line); border-radius: 8px; background: rgba(12, 12, 12, 0.86); padding: 1rem; }
+      label { display: block; margin: 1rem 0 0.25rem; font-weight: bold; color: #ff9aa1; }
+      input, textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--line); border-radius: 6px; box-sizing: border-box; background: #080808; color: var(--ink); }
+      textarea { min-height: 300px; font-family: Consolas, monospace; }
+      .button { display: inline-block; margin-top: 1rem; padding: 0.75rem 1rem; background: var(--accent); color: white; text-decoration: none; border: 1px solid var(--accent); border-radius: 6px; cursor: pointer; font-weight: 800; }
+      .button-danger { background: var(--danger); border-color: var(--danger); }
+      .notice { padding: 0.75rem 1rem; background: #180b0d; border: 1px solid var(--line); margin-bottom: 1rem; border-radius: 6px; }
+      .meta-grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+      .hint { font-size: 0.92rem; color: var(--muted); margin-top: 0.25rem; }
+      .row-actions { display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem; }
+      .top-actions { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; }
+      @media (max-width: 760px) { .meta-grid { grid-template-columns: 1fr; } .row-actions, .top-actions { flex-wrap: wrap; } }
+    </style>
+  </head>
+  <body>
+    <h1>{% if conv %}Edit Conversation: {{ conv.id }}{% else %}New Conversation{% endif %}</h1>
+    <div class="top-actions">
+      <a class="button" href="{{ url_for('chat') }}">Back To Chat Console</a>
+      <a class="button" href="{{ url_for('index') }}">Memory Library</a>
+    </div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="notice">
+          {% for message in messages %}
+            <div>{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <form method="post">
+      {% if conv %}
+        <label for="id">Conversation ID</label>
+        <input id="id" name="id" type="text" value="{{ conv.id }}" readonly />
+      {% else %}
+        <label for="id">Conversation ID</label>
+        <input id="id" name="id" type="text" required />
+      {% endif %}
+
+      <div class="meta-grid">
+        <div>
+          <label for="title">Title</label>
+          <input id="title" name="title" type="text" value="{{ conv.metadata.title if conv else '' }}" />
+        </div>
+        <div>
+          <label for="created">Created</label>
+          <input id="created" name="created" type="text" value="{{ conv.metadata.created if conv else '' }}" placeholder="2026-07-02T12:00:00+00:00" />
+        </div>
+        <div>
+          <label for="expires_at">Expires At</label>
+          <input id="expires_at" name="expires_at" type="text" value="{{ conv.metadata.expires_at if conv else '' }}" placeholder="2026-08-01T00:00:00+00:00" />
+          <div class="hint">Use ISO 8601 timestamp to expire a conversation automatically.</div>
+        </div>
+        <div>
+          <label for="participants">Participants</label>
+          <input id="participants" name="participants" type="text" value="{{ conv.metadata.participants | join(', ') if conv and conv.metadata.participants else '' }}" />
+          <div class="hint">Separate names with commas.</div>
+        </div>
+      </div>
+
+      <label for="messages">Messages (JSON array)</label>
+      <textarea id="messages" name="messages">{{ messages_json }}</textarea>
+      <div class="hint">Example: [{"role":"user","content":"Hello","timestamp":"2026-07-02T13:00:00+00:00"}]</div>
+
+      <div class="row-actions">
+        <button class="button" type="submit">Save</button>
+        <a class="button" href="{{ url_for('index') }}">Back</a>
+        {% if conv %}
+          <button class="button button-danger" type="submit" name="delete" value="1">Delete</button>
+        {% endif %}
+      </div>
+    </form>
+  </body>
+</html>

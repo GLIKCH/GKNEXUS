@@ -1,0 +1,23 @@
+{
+  "import_id": "import-20260703-050912",
+  "created": "2026-07-03T05:09:12+00:00",
+  "files": [
+    {
+      "filename": "docs/test.md",
+      "extension": ".md",
+      "detected_format": "markdown",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "# Hello\nconst x = 1;"
+        }
+      ],
+      "compact_memory": null,
+      "text_preview": "# Hello\nconst x = 1;",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-050912\\test.md"
+    }
+  ]
+}

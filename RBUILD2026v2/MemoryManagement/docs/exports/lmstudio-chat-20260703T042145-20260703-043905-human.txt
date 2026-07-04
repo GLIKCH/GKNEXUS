@@ -1,0 +1,10 @@
+Conversation: LM Studio Chat
+ID: lmstudio-chat-20260703T042145
+Model: google/gemma-4-e4b
+Created: 2026-07-03T04:38:59+00:00
+
+User (2026-07-03T04:38:57+00:00)
+hello my name is joel i will be performing a test now
+
+Assistant (2026-07-03T04:38:59+00:00)
+Hello Joel!

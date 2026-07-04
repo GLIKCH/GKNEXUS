@@ -1,0 +1,1 @@
+{"schema": "glikch.memory.compact.v1", "id": "readable-smoke", "title": "Readable Smoke", "created": "2026-07-03T06:00:00+00:00", "resume_instruction": "Continue the last work in plain English.", "messages": [{"r": "u", "t": "t", "c": "Joel asked what happened in the last chat."}, {"r": "a", "t": "t", "c": "The previous chat tested compression and import."}]}

@@ -1,0 +1,13 @@
+pyproject.toml
+MemoryManagement/README.md
+MemoryManagement/__init__.py
+MemoryManagement/cli.py
+MemoryManagement/models.py
+MemoryManagement/storage.py
+MemoryManagement/webapp.py
+memorymanagement.egg-info/PKG-INFO
+memorymanagement.egg-info/SOURCES.txt
+memorymanagement.egg-info/dependency_links.txt
+memorymanagement.egg-info/entry_points.txt
+memorymanagement.egg-info/requires.txt
+memorymanagement.egg-info/top_level.txt

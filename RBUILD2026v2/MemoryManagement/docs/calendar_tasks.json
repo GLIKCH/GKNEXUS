@@ -1,0 +1,10 @@
+{
+  "schema": "glikch.calendar.tasks.v1",
+  "updated": "2026-07-03T07:08:55+00:00",
+  "tasks": [
+    {
+      "date": "2026-07-04",
+      "title": "Smoke Task"
+    }
+  ]
+}

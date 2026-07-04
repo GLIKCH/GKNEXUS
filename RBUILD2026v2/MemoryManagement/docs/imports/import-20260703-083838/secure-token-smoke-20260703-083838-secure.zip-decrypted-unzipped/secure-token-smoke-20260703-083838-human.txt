@@ -1,0 +1,10 @@
+Conversation: Secure Token Smoke
+ID: secure-token-smoke
+Model: Unknown
+Created: 2026-07-03T08:38:38+00:00
+
+User (2026-07-03T08:38:38+00:00)
+hello secure context
+
+Assistant (2026-07-03T08:38:38+00:00)
+hello Joel

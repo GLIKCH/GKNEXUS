@@ -1,0 +1,12 @@
+{
+  "schema": "glikch.session.bundle.v1",
+  "conversation_id": "final-polish-smoke",
+  "created": "2026-07-03T05:43:18+00:00",
+  "agent_templates": "agent_templates.json",
+  "human_transcript": "final-polish-smoke-20260703-054318-human.txt",
+  "compact_memory": "final-polish-smoke-20260703-054318-llm.json",
+  "images": [],
+  "logs": [
+    "logs/2026-07-03.log"
+  ]
+}

@@ -1,0 +1,3004 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GLIKCH NEXUZ</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #070707;
+        --panel: #111;
+        --panel-2: #171010;
+        --ink: #f4eaea;
+        --muted: #b68f8f;
+        --line: #3a1717;
+        --accent: {{ ui_settings.accent_colors[0] }};
+        --accent-2: {{ ui_settings.accent_colors[3] }};
+        --danger: #ff6b6b;
+        --ok: #44d17a;
+        --nexuz-a: {{ ui_settings.accent_colors[0] }};
+        --nexuz-b: {{ ui_settings.accent_colors[1] }};
+        --nexuz-c: {{ ui_settings.accent_colors[2] }};
+        --nexuz-d: {{ ui_settings.accent_colors[3] }};
+        --nexuz-e: {{ ui_settings.accent_colors[4] }};
+        --nexuz-f: {{ ui_settings.accent_colors[5] }};
+        --border-strength: {{ ui_settings.border_strength }};
+        --glow-strength: {{ ui_settings.glow_strength }};
+        --chrome-alpha: {{ ui_settings.chrome_alpha|default(0.72) }};
+        --exterior-border: {{ ui_settings.exterior_border_color|default('#13e8ff') }};
+        --logo-scale: {{ ui_settings.logo_scale|default(1.0) }};
+        --logo-offset-x: {{ ui_settings.logo_offset_x|default(0) }}px;
+        --logo-offset-y: {{ ui_settings.logo_offset_y|default(0) }}px;
+        --mascot-scale: {{ ui_settings.mascot_scale|default(1.0) }};
+        --matrix-top: {{ ui_settings.matrix_color_top|default('#ff7a7a') }};
+        --matrix-mid: {{ ui_settings.matrix_color_mid|default('#ff1f33') }};
+        --matrix-tail: {{ ui_settings.matrix_color_tail|default('#3b0008') }};
+        --matrix-text: {{ ui_settings.matrix_text_color|default('#ff3038') }};
+        --matrix-glow: {{ ui_settings.matrix_glow_color|default('#ff1f33') }};
+        --matrix-glow-strength: {{ ui_settings.matrix_glow_strength|default(1.0) }};
+        --matrix-distance: {{ ui_settings.matrix_distance|default(230) }}vh;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.72)),
+          radial-gradient(circle at 50% 18%, rgba(186, 20, 255, 0.15), transparent 26rem),
+          url("{{ ui_settings.app_wallpaper }}") center / cover fixed no-repeat,
+          #090909;
+        color: var(--ink);
+        font-family: "Rajdhani", "Orbitron", "Eurostile", "Segoe UI", Arial, sans-serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -2;
+        background:
+          linear-gradient(rgba(255, 0, 64, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 255, 0.06) 1px, transparent 1px);
+        background-size: 76px 76px;
+        transform-origin: center bottom;
+        transform: perspective(720px) rotateX(62deg) translateY(16vh) scale(1.35);
+        animation: gridDrift 12s linear infinite;
+        opacity: 0.32;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+        background:
+          repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 4px),
+          radial-gradient(circle at 50% 50%, transparent, rgba(0,0,0,0.42));
+        mix-blend-mode: screen;
+        opacity: 0.35;
+      }
+
+      body.neon-off { --glow-strength: 0; --border-strength: 0.65; }
+      body.mascot-off .nexuz-companion { display: none; }
+      .shell { outline: max(1px, calc(1px * var(--border-strength))) solid color-mix(in srgb, var(--exterior-border), transparent 28%); box-shadow: inset 0 0 calc(26px * var(--glow-strength)) color-mix(in srgb, var(--exterior-border), transparent 82%); }
+      @keyframes gridDrift { from { background-position: 0 0, 0 0; } to { background-position: 0 76px, 76px 0; } }
+
+      button, input, select, textarea {
+        font: inherit;
+      }
+      h1, h2, h3, .tab, button, label, .role { letter-spacing: 0.01em; }
+
+      button {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #1b0c0d;
+        color: var(--ink);
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      button { transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease, background 220ms ease; }
+      button:hover { border-color: var(--accent-2); box-shadow: 0 0 calc(18px * var(--glow-strength)) color-mix(in srgb, var(--nexuz-d), transparent 62%); transform: translateY(-1px); }
+      button:disabled { cursor: wait; opacity: 0.6; transform: none; }
+      button, input, select, textarea, .panel, .message, .token-widget, .image-tray, .nexuz-companion {
+        border-width: max(1px, calc(1px * var(--border-strength)));
+      }
+      .tab:hover, .panel:hover, .message:hover, .image-tray:hover, .token-widget:hover {
+        box-shadow: 0 0 calc(18px * var(--glow-strength)) color-mix(in srgb, var(--nexuz-f), transparent 72%), inset 0 0 calc(14px * var(--glow-strength)) color-mix(in srgb, var(--nexuz-a), transparent 88%);
+      }
+      .panel, .message, .modal, aside, .dev-tools, .composer {
+        border-color: color-mix(in srgb, var(--nexuz-a), var(--line) 58%);
+      }
+
+      input, select, textarea, .panel, .message { transition: border-color 220ms ease, box-shadow 220ms ease, background 220ms ease; }
+
+      input, select, textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #080808;
+        color: var(--ink);
+        padding: 0.7rem;
+      }
+
+      textarea {
+        min-height: 72px;
+        resize: vertical;
+        line-height: 1.45;
+      }
+
+      a { color: #ff6f78; text-decoration: none; font-weight: 800; }
+      pre { white-space: pre-wrap; overflow: auto; margin: 0; }
+
+      .shell {
+        display: grid;
+        grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+        height: 100vh;
+        min-height: 0;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.55rem 1.25rem;
+        border-bottom: 1px solid var(--line);
+        background: rgba(8, 8, 8, 0.92);
+      }
+
+      h1 { margin: 0; font-size: 1.1rem; letter-spacing: 0; }
+      .brand-mark {
+        width: calc(clamp(180px, 16vw, 300px) * var(--logo-scale));
+        height: calc(74px * var(--logo-scale));
+        transform: translate(var(--logo-offset-x), var(--logo-offset-y));
+        object-fit: contain;
+        object-position: left center;
+        border-radius: 8px;
+        filter: drop-shadow(0 0 calc(12px * var(--glow-strength)) var(--exterior-border));
+      }
+      .status { color: var(--muted); font-size: 0.86rem; line-height: 1.35; }
+      .sidebar-status {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(5, 5, 5, 0.55);
+        padding: 0.65rem;
+        margin-bottom: 0.85rem;
+      }
+      .brand-row { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+      .quick-nav { position: relative; display: flex; align-items: center; gap: 0.8rem; white-space: nowrap; }
+      .nav-menu-button { width: 42px; height: 42px; padding: 0; display: grid; place-items: center; font-size: 1.2rem; }
+      .quick-menu { position: absolute; top: calc(100% + 0.55rem); left: 0; z-index: 40; min-width: 220px; display: none; grid-template-columns: 1fr; gap: 0.3rem; padding: 0.55rem; border: 1px solid color-mix(in srgb, var(--exterior-border), var(--line) 40%); border-radius: 8px; background: rgba(5,5,5,0.96); box-shadow: 0 0 calc(22px * var(--glow-strength)) color-mix(in srgb, var(--exterior-border), transparent 70%); }
+      .quick-menu.active { display: grid; }
+      .quick-menu a, .quick-menu button { width: 100%; justify-content: flex-start; gap: 0.6rem; padding: 0.55rem; border: 1px solid transparent; }
+      .cyber-clock {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.45rem 0.7rem;
+        background: #050505;
+        color: #ff4b55;
+        font-family: Consolas, monospace;
+        font-size: 0.78rem;
+        line-height: 1.35;
+        text-shadow: 0 0 8px rgba(255, 59, 69, 0.65);
+        min-width: 250px;
+      }
+      .cyber-clock strong { color: var(--ok); }
+      .quick-nav a, .quick-nav button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        width: auto;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: #ff838b;
+        padding: 0;
+        font-size: 0.86rem;
+      }
+      .agent-row { display: flex; gap: 0.6rem; align-items: center; white-space: nowrap; }
+      .agent-row select, .agent-row input { min-width: 150px; }
+
+      .breadcrumbs {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 38px;
+        padding: 0.55rem 1.25rem;
+        border-bottom: 1px solid var(--line);
+        background: #080808;
+        color: var(--muted);
+        font-size: 0.84rem;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .crumb {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #13090a;
+        padding: 0.28rem 0.55rem;
+      }
+      .crumb.ok { border-color: #236b3c; color: var(--ok); }
+      .crumb.warn { border-color: #9f6b1c; color: #ffb84d; }
+      .crumb.bad { border-color: #8f1c25; color: var(--danger); }
+      .crumb.ready { border-color: #236b3c; color: var(--ok); }
+      .server-toggle { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--muted); font-size: 0.84rem; }
+      .server-toggle input { width: auto; accent-color: var(--ok); }
+
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid var(--line);
+        background: #0b0b0b;
+      }
+
+      .tab {
+        padding: 0.65rem 0.9rem;
+      }
+
+      .tab.active {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .tab-panel { display: none; min-height: 0; }
+      .tab-panel.active { display: grid; }
+
+      #dashboard {
+        grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+        min-height: 0;
+      }
+
+      #developer {
+        grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+        min-height: 0;
+      }
+
+      #mcp, #extensions, #tasks, #settings {
+        min-height: 0;
+        overflow: auto;
+        padding: 1.25rem;
+        place-items: start center;
+      }
+
+      aside, .dev-tools {
+        padding: 0.75rem 1rem;
+        border-right: 1px solid var(--line);
+        background: rgba(17, 9, 10, var(--chrome-alpha));
+        overflow: auto;
+      }
+
+      .field { margin-bottom: 1rem; }
+      label { display: block; margin-bottom: 0.35rem; color: var(--muted); font-size: 0.84rem; font-weight: 800; }
+      .hint { color: var(--muted); font-size: 0.82rem; line-height: 1.4; margin-top: 0.35rem; }
+      #exportResult { white-space: pre-wrap; overflow-wrap: anywhere; }
+      .row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      .row > button, .row > a { flex: 1; min-width: 130px; text-align: center; padding: 0.65rem; }
+      .button-active { transform: translateY(1px); border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(213, 31, 42, 0.2); }
+      .hidden-input { display: none; }
+
+      .primary { background: var(--accent); border-color: var(--accent); }
+      .danger { background: #431114; border-color: #8f1c25; }
+      .ok { color: var(--ok); }
+      .bad { color: var(--danger); }
+
+      .messages {
+        min-height: 0;
+        overflow: auto;
+        padding: 0.75rem 8rem 0.75rem 1.25rem;
+      }
+
+      .message {
+        width: min(900px, 100%);
+        margin: 0 auto 1rem;
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14, 14, 14, 0.96);
+        line-height: 1.55;
+        white-space: pre-wrap;
+      }
+
+      .message.user { border-color: #5c1d24; background: #140b0c; }
+      .message.assistant { border-color: #7a1720; background: #1b0d0f; }
+      .role { display: block; margin-bottom: 0.4rem; color: #ff8b93; font-size: 0.78rem; font-weight: 900; text-transform: uppercase; }
+
+      .composer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-top: 1px solid var(--line);
+        background: rgba(8, 8, 8, var(--chrome-alpha));
+        align-items: end;
+      }
+
+      .composer-main { min-width: 0; }
+      .composer textarea {
+        min-height: 54px;
+        height: 56px;
+        max-height: 140px;
+        padding: 0.65rem;
+      }
+      .composer-controls {
+        display: grid;
+        grid-template-columns: minmax(140px, 220px) minmax(100px, 140px) minmax(130px, 190px) minmax(130px, 200px) minmax(130px, 200px) 56px 34px 34px;
+        gap: 0.4rem;
+        margin-bottom: 0.42rem;
+      }
+      .composer-controls input,
+      .composer-controls select,
+      .composer-controls button {
+        min-height: 42px;
+        padding-top: 0.45rem;
+        padding-bottom: 0.45rem;
+      }
+
+      .composer-actions {
+        display: flex;
+        gap: 0.45rem;
+        align-items: end;
+      }
+      .token-widget {
+        width: 112px;
+        height: 76px;
+        min-height: 76px;
+        border: 1px solid color-mix(in srgb, var(--exterior-border), var(--line) 45%);
+        border-radius: 8px;
+        background: linear-gradient(180deg, rgba(24, 6, 8, 0.92), rgba(6, 6, 6, 0.84));
+        padding: 0.45rem;
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 0.45rem;
+        align-items: center;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 0 calc(16px * var(--glow-strength)) rgba(255, 32, 50, 0.18);
+      }
+      .token-ring {
+        position: relative;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: conic-gradient(var(--ok) 0deg, #230b0d 0deg);
+        display: grid;
+        place-items: center;
+        box-shadow: inset 0 0 12px rgba(255, 55, 68, 0.24), 0 0 12px rgba(255, 40, 55, 0.18);
+      }
+      .token-ring::after {
+        content: "";
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #080808;
+        position: absolute;
+      }
+      .token-ring span { position: relative; z-index: 1; font-size: 0.56rem; font-weight: 900; line-height: 1; color: #fff6f7; }
+      .token-detail { display: block; color: #ffc3c8; font-family: Consolas, monospace; font-size: 0.62rem; line-height: 1.25; overflow: hidden; }
+      .debug-ticker {
+        min-height: 58px;
+        max-height: 58px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 59, 69, 0.28);
+        border-radius: 8px;
+        background: rgba(3, 3, 3, 0.78);
+        color: #ff8b93;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.72rem;
+        line-height: 1.35;
+        padding: 0.45rem 0.6rem;
+        box-shadow: inset 0 0 18px rgba(255, 32, 48, 0.08);
+      }
+      .debug-ticker-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .debug-ticker-line.error { color: #ff4b55; }
+      .debug-ticker-line.ok { color: var(--ok); }
+      .matrix-rain {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+        opacity: 0.34;
+        mix-blend-mode: screen;
+      }
+      .matrix-rain.hidden { display: none; }
+      .matrix-column {
+        position: absolute;
+        top: -120vh;
+        white-space: pre;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.78rem;
+        line-height: 1.04;
+        color: var(--matrix-text);
+        text-shadow: 0 0 calc(8px * var(--matrix-glow-strength)) var(--matrix-glow), 0 0 calc(20px * var(--matrix-glow-strength)) color-mix(in srgb, var(--matrix-glow), transparent 54%);
+        background: linear-gradient(180deg, var(--matrix-top), var(--matrix-mid) 42%, var(--matrix-tail) 88%, transparent);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: matrixFall linear infinite;
+        will-change: transform;
+      }
+      @keyframes matrixFall { to { transform: translateY(var(--matrix-distance)); } }
+      .nexuz-companion {
+        position: fixed;
+        right: 1.1rem;
+        bottom: 7.2rem;
+        z-index: 15;
+        width: calc(142px * var(--mascot-scale));
+        min-height: calc(176px * var(--mascot-scale));
+        border: 1px solid rgba(255, 59, 69, 0.34);
+        border-radius: 10px;
+        background: linear-gradient(180deg, rgba(16, 4, 6, 0.72), rgba(3, 3, 3, 0.5));
+        padding: 0.5rem;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 0 24px rgba(213, 31, 42, 0.18), inset 0 0 20px rgba(186, 20, 255, 0.08);
+        backdrop-filter: blur(8px);
+      }
+      .nexuz-companion::before {
+        content: "";
+        position: absolute;
+        inset: 7px;
+        border: 1px solid rgba(255, 69, 82, 0.18);
+        border-radius: 7px;
+        pointer-events: none;
+      }
+      .nexuz-companion img {
+        max-width: calc(120px * var(--mascot-scale));
+        max-height: calc(142px * var(--mascot-scale));
+        object-fit: contain;
+        filter: drop-shadow(0 0 16px rgba(213, 31, 42, 0.42));
+      }
+      .mascot-caption { font-size: 0.64rem; color: #ffc6ca; text-align: center; text-shadow: 0 0 8px rgba(255, 59, 69, 0.45); }
+      .mascot-comment {
+        position: absolute;
+        right: 0.35rem;
+        bottom: calc(100% + 0.95rem);
+        width: min(360px, calc(100vw - 2rem));
+        min-height: 76px;
+        display: none;
+        z-index: 95;
+        border: 3px solid #1b0508;
+        border-radius: 24px 24px 24px 10px;
+        background: radial-gradient(circle at 25% 20%, #fff7db, #ffd9d9 62%, #ffc0c8);
+        padding: 0.9rem 1rem;
+        color: #190407;
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        font-size: clamp(0.86rem, 1.2vw, 1rem);
+        font-weight: 800;
+        line-height: 1.28;
+        overflow-wrap: anywhere;
+        box-shadow: 5px 6px 0 #000, 0 0 26px rgba(255, 32, 48, 0.34);
+        text-shadow: none;
+      }
+      .mascot-comment::after {
+        content: "";
+        position: absolute;
+        right: 2.4rem;
+        bottom: -18px;
+        width: 30px;
+        height: 30px;
+        background: #ffc6cc;
+        border-right: 3px solid #1b0508;
+        border-bottom: 3px solid #1b0508;
+        transform: rotate(45deg);
+        box-shadow: 4px 4px 0 #000;
+      }
+      .mascot-comment.active { display: block; animation: bubblePop 220ms cubic-bezier(.2, 1.35, .35, 1) both; }
+      @keyframes bubblePop { from { opacity: 0; transform: translateY(12px) scale(0.84) rotate(-1deg); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); } }
+
+      .icon-button {
+        min-width: 44px;
+        padding: 0.55rem;
+      }
+      #saveAgentButton, #addAgentButton, #removeAgentButton {
+        min-width: 0;
+        padding: 0.42rem 0.45rem;
+        font-size: 0.84rem;
+      }
+
+      .image-tray {
+        width: 46px;
+        height: 46px;
+        min-height: 46px;
+        padding: 0.25rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 2px;
+        align-self: end;
+      }
+      .image-slot {
+        position: relative;
+        min-width: 7px;
+        min-height: 7px;
+        border: 1px solid rgba(255, 59, 69, 0.28);
+        border-radius: 3px;
+        background: linear-gradient(135deg, #060606, #18090b);
+        overflow: hidden;
+      }
+      .image-slot.empty:hover { border-color: var(--accent-2); box-shadow: inset 0 0 10px rgba(255, 59, 69, 0.2); }
+      .image-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .image-slot.occupied::after {
+        content: "X";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(0, 0, 0, 0.7);
+        color: #ff7780;
+        font-size: 0.5rem;
+        font-weight: 900;
+        opacity: 0;
+        transition: opacity 160ms ease;
+      }
+      .image-slot.occupied:hover::after { opacity: 1; }
+
+      .attachment-strip {
+        display: none;
+        gap: 0.5rem;
+        margin-top: 0.45rem;
+        overflow-x: auto;
+      }
+
+      .attachment-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        max-width: 220px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #13090a;
+        padding: 0.25rem 0.55rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
+      .attachment-chip img {
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+      .live-status {
+        min-height: 28px;
+        margin-top: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .live-status.active { color: #ffd0d4; }
+      .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); box-shadow: 0 0 10px currentColor; }
+      .live-status.sending .live-dot { background: #ffb84d; }
+      .live-status.receiving .live-dot { background: var(--ok); }
+      .live-status.error .live-dot { background: var(--danger); }
+      .thinking-dots::after { content: ""; animation: dots 1.2s steps(4,end) infinite; }
+      @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75%, 100% { content: "..."; } }
+
+      .send {
+        align-self: end;
+        min-width: 88px;
+        height: 46px;
+        padding: 0.55rem 0.8rem;
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .admin-grid {
+        display: grid;
+        grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+        overflow: auto;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(12, 12, 12, 0.9);
+        padding: 1rem;
+      }
+
+      .panel h2 {
+        margin: 0 0 0.8rem;
+        font-size: 0.98rem;
+      }
+
+      .conversation-list {
+        display: grid;
+        gap: 0.5rem;
+        max-height: 40vh;
+        overflow: auto;
+      }
+
+      .conversation-item {
+        width: 100%;
+        padding: 0.7rem;
+        text-align: left;
+      }
+
+      .conversation-item.active { border-color: var(--accent-2); background: #250c0f; }
+      .meta { color: var(--muted); font-size: 0.8rem; margin-top: 0.25rem; }
+
+      .source, .log-box, .json-editor {
+        min-height: 300px;
+        max-height: 52vh;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #050505;
+        padding: 1rem;
+        color: #f8dede;
+        font-family: Consolas, monospace;
+        font-size: 0.86rem;
+      }
+
+      .json-editor { width: 100%; }
+      .syntax-view, .syntax-code {
+        min-height: 120px;
+        max-height: 260px;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #050505;
+        padding: 1rem;
+        color: #f8dede;
+        font-family: Consolas, monospace;
+        font-size: 0.86rem;
+        white-space: pre-wrap;
+      }
+      .json-key { color: #ff838b; }
+      .json-string { color: #ffd0d4; }
+      .json-number { color: #f7b267; }
+      .json-bool { color: #44d17a; }
+      .json-null { color: #b68f8f; }
+      .calendar { width: min(980px, 100%); display: grid; grid-template-columns: repeat(7, minmax(90px, 1fr)); gap: 0.5rem; }
+      .calendar-day { min-height: 92px; padding: 0.55rem; text-align: left; border-radius: 8px; }
+      .calendar-day strong { display: block; color: #ff838b; margin-bottom: 0.35rem; }
+      .event-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+      .event-table th, .event-table td { border: 1px solid var(--line); padding: 0.45rem; text-align: left; font-size: 0.84rem; }
+      .event-table th { color: #ff9ca3; background: rgba(20, 7, 9, 0.86); }
+      .event-list-box { max-height: 280px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem; background: rgba(5,5,5,0.72); }
+      .extension-card { border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem; background: rgba(8,8,8,var(--chrome-alpha)); margin-bottom: 0.65rem; }
+      .square-icon { width: 48px; height: 48px; min-width: 48px; display: inline-grid; place-items: center; font-size: 1.4rem; padding: 0; }
+      .task-pill { display: block; margin-top: 0.25rem; font-size: 0.75rem; color: var(--ok); }
+      .modal-backdrop { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.72); z-index: 30; }
+      .modal-backdrop.active { display: flex; }
+      .modal { width: min(620px, calc(100vw - 2rem)); border: 1px solid var(--line); border-radius: 8px; padding: 1rem; background: #090909; max-height: 92vh; overflow: auto; }
+      .code-block { position: relative; margin-top: 0.75rem; }
+      .code-block pre { background: #050505; border: 1px solid var(--line); border-radius: 8px; padding: 1rem; overflow: auto; }
+      .copy-code { position: absolute; top: 0.45rem; right: 0.45rem; padding: 0.25rem 0.5rem; font-size: 0.78rem; }
+      .progress { display: none; height: 8px; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-top: 0.65rem; background: #050505; }
+      .progress-bar { height: 100%; width: 0; background: var(--accent); transition: width 0.2s ease; }
+      .error { display: none; color: var(--danger); margin-top: 0.75rem; line-height: 1.4; }
+      .empty { width: min(760px, 100%); margin: 14vh auto 0; color: var(--muted); text-align: center; line-height: 1.55; }
+
+
+      .nexuz-splash-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(8px);
+        opacity: 0;
+        transition: opacity 720ms ease;
+      }
+      .nexuz-splash-backdrop.active { display: flex; opacity: 1; }
+      .nexuz-splash-backdrop.closing { opacity: 0; }
+      .nexuz-splash {
+        position: relative;
+        width: min(1180px, 96vw);
+        max-height: 94vh;
+        display: grid;
+        place-items: center;
+        color: #f8e8f6;
+        animation: splashZoom 760ms cubic-bezier(.2,.8,.2,1) both;
+      }
+      .nexuz-splash::before,
+      .nexuz-splash::after {
+        content: "";
+        position: absolute;
+        inset: -10px;
+        pointer-events: none;
+        border: 1px solid rgba(255, 42, 86, 0.58);
+        clip-path: polygon(0 8%, 4% 8%, 4% 0, 18% 0, 18% 2px, 82% 2px, 82% 0, 96% 0, 96% 8%, 100% 8%, 100% 28%, calc(100% - 2px) 28%, calc(100% - 2px) 72%, 100% 72%, 100% 92%, 96% 92%, 96% 100%, 82% 100%, 82% calc(100% - 2px), 18% calc(100% - 2px), 18% 100%, 4% 100%, 4% 92%, 0 92%, 0 72%, 2px 72%, 2px 28%, 0 28%);
+        filter: drop-shadow(0 0 10px rgba(255, 0, 80, 0.65));
+        animation: hudPulse 2.4s ease-in-out infinite;
+      }
+      .nexuz-splash::after { inset: 12px; border-color: rgba(0, 238, 255, 0.22); animation-delay: 700ms; }
+      .nexuz-art-wrap {
+        position: relative;
+        width: min(980px, 92vw);
+        display: grid;
+        place-items: center;
+      }
+      .nexuz-art-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 8% 10%;
+        background: radial-gradient(circle, rgba(255, 0, 128, 0.34), transparent 60%);
+        filter: blur(26px);
+        animation: bloomPulse 2.8s ease-in-out infinite;
+      }
+      .nexuz-art {
+        position: relative;
+        width: 100%;
+        max-height: 68vh;
+        object-fit: contain;
+        filter: drop-shadow(0 0 22px rgba(255, 0, 90, 0.42));
+        animation: crtFlicker 1.6s steps(2, end), rgbGlitch 2.2s ease-in-out 1;
+      }
+      .nexuz-copy {
+        width: min(860px, 92vw);
+        text-align: center;
+        margin-top: -0.2rem;
+        padding: 0 1rem 0.5rem;
+        text-shadow: 0 0 12px rgba(255, 45, 96, 0.55);
+      }
+      .nexuz-copy h2 { margin: 0.25rem 0 0.25rem; letter-spacing: 0.18em; color: #ffdee9; font-size: clamp(1rem, 2vw, 1.45rem); }
+      .nexuz-copy h3 { margin: 0; letter-spacing: 0.24em; color: #ff4bda; font-size: clamp(0.78rem, 1.4vw, 1rem); }
+      .nexuz-copy p { margin: 0.65rem auto; max-width: 840px; color: #d9c7d8; line-height: 1.45; }
+      .nexuz-terminal {
+        min-height: 1.3rem;
+        color: #00f0ff;
+        font-family: Consolas, monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.12em;
+      }
+      .nexuz-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; }
+      .nexuz-enter { padding: 0.75rem 2.4rem; border-color: #ff254f; background: rgba(48, 4, 16, 0.92); color: #ffeff4; letter-spacing: 0.12em; box-shadow: 0 0 24px rgba(255, 0, 72, 0.36); }
+      .nexuz-check { display: inline-flex; align-items: center; gap: 0.45rem; color: #c9a7c4; font-size: 0.82rem; }
+      .nexuz-check input { width: auto; accent-color: #ff2bd6; }
+      .nexuz-particles {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        opacity: 0.32;
+      }
+      .nexuz-particles span {
+        position: absolute;
+        color: #00f0ff;
+        font-family: Consolas, monospace;
+        font-size: 0.75rem;
+        animation: particleRise 4.8s linear infinite;
+      }
+      .nexuz-scanline {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(transparent, rgba(255,255,255,0.12), transparent);
+        height: 22%;
+        animation: scanSweep 2.8s linear infinite;
+        mix-blend-mode: screen;
+      }
+      @keyframes splashZoom { from { opacity: 0; transform: scale(0.96); filter: blur(6px); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
+      @keyframes hudPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+      @keyframes bloomPulse { 0%, 100% { opacity: 0.42; transform: scale(0.98); } 50% { opacity: 0.75; transform: scale(1.04); } }
+      @keyframes crtFlicker { 0%, 18%, 22%, 100% { opacity: 1; } 20% { opacity: 0.72; } }
+      @keyframes rgbGlitch { 0%, 100% { transform: translate(0); } 18% { transform: translate(2px, -1px); } 20% { transform: translate(-2px, 1px); } 24% { transform: translate(1px, 0); } }
+      @keyframes particleRise { from { transform: translateY(24px); opacity: 0; } 12% { opacity: 0.8; } to { transform: translateY(-110vh); opacity: 0; } }
+      @keyframes scanSweep { from { transform: translateY(-120%); } to { transform: translateY(520%); } }
+
+      .settings-grid {
+        width: min(1120px, 100%);
+        display: grid;
+        grid-template-columns: repeat(2, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .color-dial-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(90px, 1fr));
+        gap: 0.75rem;
+      }
+      .color-dial-grid input[type="color"] {
+        height: 44px;
+        padding: 0.15rem;
+        border-radius: 999px;
+      }
+      .wallpaper-preview {
+        width: 100%;
+        min-height: 110px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #050505 center / cover no-repeat;
+      }
+      .token-file-grid { display: grid; gap: 0.4rem; margin-top: 0.75rem; }
+      .token-file-row { display: grid; grid-template-columns: minmax(0, 1fr) 78px 84px; gap: 0.5rem; align-items: center; padding: 0.45rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(5,5,5,0.74); font-size: 0.82rem; }
+      .token-file-row strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .voice-row { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: end; }
+      .mic-button.listening { border-color: var(--ok); color: var(--ok); box-shadow: 0 0 18px rgba(68,209,122,0.35); }
+
+      @media (max-width: 920px) {
+        header, .brand-row { flex-direction: column; align-items: flex-start; }
+        .quick-nav { flex-wrap: wrap; }
+        #dashboard, #developer, .admin-grid, .settings-grid { grid-template-columns: 1fr; }
+        aside, .dev-tools { border-right: 0; border-bottom: 1px solid var(--line); }
+        .composer { grid-template-columns: 1fr; }
+        .composer-controls { grid-template-columns: 1fr 1fr; }
+        .composer-actions { justify-content: flex-end; }
+        .messages { padding-right: 1rem; }
+        .nexuz-companion { right: 0.65rem; bottom: 7rem; width: 112px; min-height: 142px; opacity: 0.92; }
+        .nexuz-companion img { max-width: 92px; max-height: 110px; }
+        .mascot-comment { right: 0; width: min(280px, calc(100vw - 1.2rem)); }
+        .send { width: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+
+      <div class="nexuz-splash-backdrop" id="nexuzSplash" role="dialog" aria-modal="true" aria-labelledby="nexuzSplashTitle">
+        <div class="nexuz-splash">
+          <div class="nexuz-particles" id="nexuzParticles"></div>
+          <div class="nexuz-scanline"></div>
+          <div class="nexuz-art-wrap">
+            <img class="nexuz-art" src="{{ url_for('static', filename='brand/gknxz001.png') }}" alt="GLIKCH NEXUZ Local AI Engineering Platform" />
+          </div>
+          <div class="nexuz-copy">
+            <h2 id="nexuzSplashTitle">Local AI Engineering Platform</h2>
+            <h3>Develop ? Research ? Remember ? Create</h3>
+            <p>A private AI engineering workspace for local LLMs, persistent memory, intelligent agents, project management, automation, cybersecurity research, and software development.</p>
+            <div class="nexuz-terminal" id="nexuzTerminal">System Initializing...</div>
+            <div class="nexuz-actions">
+              <button class="nexuz-enter" id="enterNexuzButton" type="button">ENTER NEXUZ</button>
+              <label class="nexuz-check"><input id="dontShowNexuzSplash" type="checkbox" /> Don't show again</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="matrix-rain" id="matrixRain" aria-hidden="true"></div>
+
+      <header>
+        <div class="brand-row">
+          <img class="brand-mark" id="appLogo" src="{{ ui_settings.app_logo }}" alt="GLIKCH NEXUZ logo" />
+          <div class="cyber-clock" id="cyberClock">Loading clock...</div>
+          <nav class="quick-nav" aria-label="Main navigation">
+            <button class="nav-menu-button" type="button" id="quickMenuButton" title="NEXUZ menu">&equiv;</button>
+            <div class="quick-menu" id="quickMenu">
+              <a href="{{ url_for('index') }}">[L] Library</a>
+              <a href="{{ url_for('create_conversation') }}">[C] Capture</a>
+              <button type="button" id="memoryFolderButton">[M] Memory Folder</button>
+              <button type="button" id="resetAllButton">[R] Reset All</button>
+            </div>
+          </nav>
+        </div>
+        <form method="post" action="{{ url_for('logout') }}">
+          <button type="submit">Logout</button>
+        </form>
+      </header>
+
+      <nav class="tabs" aria-label="Console sections">
+        <button class="tab active" data-tab="dashboard" type="button">Dashboard</button>
+        <button class="tab" data-tab="developer" type="button">Developer</button>
+        <button class="tab" data-tab="mcp" type="button">MCP Connectivity</button>
+        <button class="tab" data-tab="extensions" type="button">Extensions</button>
+        <button class="tab" data-tab="tasks" type="button">Tasks and Dates</button>
+        <button class="tab" data-tab="settings" type="button">Settings</button>
+      </nav>
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        <span class="crumb ready" id="readyCrumb">Ready</span>
+        <label class="server-toggle"><input id="serverToggle" type="checkbox" checked /> Server On</label>
+      </div>
+
+      <section class="tab-panel active" id="dashboard">
+        <aside>
+          <div class="sidebar-status">
+            <label>LM Studio Status</label>
+            <div class="status" id="status">LM Studio: {{ lm_studio_url }}</div>
+          </div>
+          <div class="field">
+            <label for="conversationTitle">Conversation Title</label>
+            <input id="conversationTitle" type="text" value="LM Studio Chat" />
+          </div>
+          <div class="field">
+            <label for="conversationId">Conversation ID</label>
+            <input id="conversationId" type="text" />
+            <div class="hint">This ID becomes the Markdown memory file name.</div>
+          </div>
+          <div class="field">
+            <label for="temperature">Temperature</label>
+            <input id="temperature" type="number" min="0" max="2" step="0.1" value="0.7" />
+          </div>
+          <div class="field">
+            <label for="bundlePassword">Bundle Password</label>
+            <input id="bundlePassword" type="password" placeholder="Optional encrypted-at-rest bundle" autocomplete="new-password" />
+            <div class="hint">If set, the exported ZIP contains an encrypted secure payload.</div>
+          </div>
+          <div class="row">
+            <button id="compressResetButton" type="button">Compress + Reset</button>
+          </div>
+          <div class="field">
+            <label for="importZipPassword">Import ZIP Password</label>
+            <input id="importZipPassword" type="password" placeholder="Only needed for secure bundles" autocomplete="current-password" />
+          </div>
+          <input class="hidden-input" id="memoryFileInput" type="file" multiple accept=".zip,.json,.txt,.md,.csv,.ipynb,.docx,.doc,.xlsx,.xlsm,.pdf,.png,.bmp,.jpg,.jpeg,.webp,.gif,.tif,.tiff" />
+          <input class="hidden-input" id="agentImportInput" type="file" accept=".json" />
+          <input class="hidden-input" id="projectFolderInput" type="file" multiple webkitdirectory directory />
+          <div class="row" style="margin-top: 0.5rem;">
+            <button id="openFolderButton" type="button">Import Context File</button>
+            <button id="selectProjectButton" type="button">Import Project Folder</button>
+          </div>
+          <div class="row" style="margin-top: 0.5rem;">
+            <button id="applyImportButton" type="button">Load to LLM Server</button>
+            <button id="loadLatestCompressedButton" type="button">Load Previous Compressed</button>
+          </div>
+          <div class="progress" id="bundleProgress"><div class="progress-bar" id="bundleProgressBar"></div></div>
+          <div class="hint" id="exportResult"></div>
+          <div class="hint" id="compressionEstimate">Compression estimate: waiting for chat data.</div>
+          <pre class="log-box" id="importLog" style="min-height: 140px; max-height: 220px; margin-top: 0.75rem;">No imported context loaded.</pre>
+          <div class="error" id="error"></div>
+        </aside>
+
+        <section class="messages" id="messages" aria-live="polite">
+          <div class="empty" id="emptyState">
+            Local chat runs through LM Studio, stores clean transcript memory, and can export handoff files when context gets tight.
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="developer">
+        <div class="dev-tools">
+          <div class="panel">
+            <h2>LM Studio Status</h2>
+            <div id="systemStatus" class="meta">Checking status...</div>
+            <div class="row" style="margin-top: 0.75rem;">
+              <button id="refreshStatusButton" type="button">Refresh Status</button>
+              <button id="refreshAdminButton" type="button">Refresh Memory</button>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top: 1rem;">
+            <h2>Stored Conversations</h2>
+            <div class="conversation-list" id="conversationList"></div>
+            <div class="row" style="margin-top: 0.75rem;">
+              <button id="newConversationButton" type="button">Create Empty</button>
+              <button id="deleteConversationButton" class="danger" type="button">Delete Selected</button>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top: 1rem;">
+            <h2>Dated Error Logs</h2>
+            <select id="logSelect"></select>
+            <div class="row" style="margin-top: 0.75rem;">
+              <button id="loadLogButton" type="button">Open Log</button>
+              <button id="exportLogButton" type="button">Export Log</button>
+              <button id="importLogButton" type="button">Import Log</button>
+              <input class="hidden-input" id="logFileInput" type="file" multiple accept=".log,.txt,.json" />
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="panel">
+            <h2>Conversation Control</h2>
+            <div class="field">
+              <label for="selectedTitle">Title</label>
+              <input id="selectedTitle" type="text" />
+            </div>
+            <div class="field">
+              <label for="selectedMetadata">Metadata JSON</label>
+              <textarea id="selectedMetadata" class="json-editor"></textarea>
+            </div>
+            <div class="field">
+              <label for="selectedMessages">Messages JSON</label>
+              <textarea id="selectedMessages" class="json-editor"></textarea>
+              <pre id="messagesPreview" class="syntax-view"></pre>
+            </div>
+            <div class="row">
+              <button id="saveConversationButton" class="primary" type="button">Save</button>
+              <button id="exportTxtButton" type="button">Export TXT</button>
+              <button id="exportJsonButton" type="button">Export LLM JSON</button>
+              <button id="exportCsvButton" type="button">Export CSV</button>
+              <button id="exportNotebookButton" type="button">Export IPYNB</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>webapp.py Data Flow</h2>
+            <pre class="source syntax-code" id="sourceView">Loading source...</pre>
+            <h2 style="margin-top: 1rem;">Log Context</h2>
+            <pre class="log-box syntax-code" id="logView">Select a dated log to inspect errors.</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="mcp">
+        <div class="settings-grid">
+          <div class="panel">
+            <h2>MCP Connectivity</h2>
+            <p class="hint">Future connection hub for email, social posts, files, issue trackers, calendars, cloud storage, and developer automations. Connectors should be explicit, permission-scoped, and logged.</p>
+            <div class="row"><button type="button">Email Connector</button><button type="button">Social Connector</button><button type="button">Git Connector</button></div>
+          </div>
+          <div class="panel">
+            <h2>Integration Readiness</h2>
+            <p class="hint">Design target: each integration gets a purpose, scopes, credential status, audit log, and a clear disconnect path. This keeps NEXUZ extension work safer for outside developers.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="extensions">
+        <div class="panel" style="width:min(1040px,100%); margin-top:1rem;">
+          <h2>Extensions</h2>
+          <div class="row" style="margin-bottom:0.75rem;"><button class="square-icon" id="addExtensionButton" type="button" title="Add extension">+</button><button class="square-icon" id="removeExtensionButton" type="button" title="Remove selected extension">-</button><button id="sendAuthProcessButton" type="button">Send Auth Process</button></div>
+          <div id="extensionsList"></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tasks">
+        <div class="panel" style="width:min(1040px,100%); margin-top:1rem;">
+          <h2>Tasks and Dates</h2>
+          <div class="row" style="margin-bottom:0.75rem;">
+            <button id="prevMonthButton" type="button">Back</button>
+            <button id="todayButton" type="button">Today</button>
+            <button id="nextMonthButton" type="button">Next</button>
+            <button id="saveTasksButton" type="button">Save Tasks</button>
+          </div>
+          <h2 id="calendarTitle"></h2>
+          <div class="calendar" id="calendarGrid"></div>
+          <h2 style="margin-top:1rem;">Scheduled Tasks</h2>
+          <table class="event-table" id="taskTable"><thead><tr><th>Done</th><th>Date</th><th>Time</th><th>Title</th><th>Urgency</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="settings">
+        <div class="settings-grid">
+          <div class="panel">
+            <h2>Wallpaper</h2>
+            <div class="field">
+              <label for="loginWallpaperFile">Login Wallpaper</label>
+              <input id="loginWallpaperFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" />
+              <input id="loginWallpaperUrl" type="text" placeholder="Or paste an image URL/path" />
+              <div class="wallpaper-preview" id="loginWallpaperPreview"></div>
+            </div>
+            <div class="field">
+              <label for="appWallpaperFile">App Wallpaper</label>
+              <input id="appWallpaperFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" />
+              <input id="appWallpaperUrl" type="text" placeholder="Or paste an image URL/path" />
+              <div class="wallpaper-preview" id="appWallpaperPreview"></div>
+            </div>
+            <div class="field">
+              <label for="logoFile">Top Left Logo</label>
+              <input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" />
+              <input id="logoUrl" type="text" placeholder="Or paste logo URL/path" />
+              <div class="row"><div class="field"><label for="logoScale">Logo Scale</label><input id="logoScale" type="range" min="0.6" max="2.2" step="0.05" /></div><div class="field"><label for="logoOffsetX">Logo X</label><input id="logoOffsetX" type="range" min="-120" max="120" step="1" /></div><div class="field"><label for="logoOffsetY">Logo Y</label><input id="logoOffsetY" type="range" min="-40" max="40" step="1" /></div></div>
+              <div class="wallpaper-preview" id="logoPreview"></div>
+            </div>
+            <div class="field">
+              <label for="loginPosition">Login Form Position</label>
+              <select id="loginPosition">
+                <option value="center">Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Neon HUD Theme</h2>
+            <div class="field">
+              <label for="themePreset">Preset</label>
+              <select id="themePreset">
+                <option value="crimson-violet">Crimson Violet</option>
+                <option value="ember-gold">Ember Gold</option>
+                <option value="magenta-cyan">Magenta Cyan</option>
+                <option value="toxic-terminal">Toxic Terminal</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div class="color-dial-grid" id="accentColorGrid">
+              <label>Accent 1<input id="accentColor0" type="color" /></label>
+              <label>Accent 2<input id="accentColor1" type="color" /></label>
+              <label>Accent 3<input id="accentColor2" type="color" /></label>
+              <label>Accent 4<input id="accentColor3" type="color" /></label>
+              <label>Accent 5<input id="accentColor4" type="color" /></label>
+              <label>Accent 6<input id="accentColor5" type="color" /></label>
+            </div>
+            <div class="field">
+              <label for="borderStrength">Border Line Strength</label>
+              <input id="borderStrength" type="range" min="0.4" max="2" step="0.1" />
+            </div>
+            <div class="field">
+              <label for="exteriorBorderColor">Exterior Border Color</label>
+              <input id="exteriorBorderColor" type="color" />
+            </div>
+            <div class="field">
+              <label for="glowStrength">Glow Strength</label>
+              <input id="glowStrength" type="range" min="0" max="2" step="0.1" />
+            </div>
+            <div class="field">
+              <label for="chromeAlpha">Panel Transparency</label>
+              <input id="chromeAlpha" type="range" min="0.25" max="1" step="0.05" />
+            </div>
+            <label class="server-toggle"><input id="neonEnabled" type="checkbox" checked /> Neon border effects</label>
+            <label class="server-toggle"><input id="mascotEnabled" type="checkbox" checked /> Show emotion mascot</label>
+            <div class="field"><label for="mascotScale">Mascot Workspace Size</label><input id="mascotScale" type="range" min="0.7" max="1.8" step="0.05" /></div>
+            <h3>Matrix Rain</h3>
+            <label class="server-toggle"><input id="matrixEnabled" type="checkbox" checked /> Enable red matrix rain</label>
+            <div class="field"><label for="matrixCharset">Character Set</label><input id="matrixCharset" type="text" maxlength="120" placeholder="01GLIKCHNEXUZ" /></div>
+            <label class="server-toggle"><input id="matrixEmojiEnabled" type="checkbox" /> Include emoji glyphs</label>
+            <div class="row">
+              <label>Trail Top<input id="matrixColorTop" type="color" /></label>
+              <label>Trail Core<input id="matrixColorMid" type="color" /></label>
+              <label>Trail Fade<input id="matrixColorTail" type="color" /></label>
+            </div>
+            <div class="row">
+              <label>Text Color<input id="matrixTextColor" type="color" /></label>
+              <label>Glow Color<input id="matrixGlowColor" type="color" /></label>
+            </div>
+            <div class="field"><label for="matrixGlowStrength">Text Glow Intensity</label><input id="matrixGlowStrength" type="range" min="0" max="3" step="0.1" /></div>
+            <div class="field"><label for="matrixTextSize">Text Size</label><input id="matrixTextSize" type="range" min="0.45" max="1.4" step="0.01" /></div>
+            <div class="field"><label for="matrixDistance">Fall Distance</label><input id="matrixDistance" type="range" min="120" max="420" step="5" /></div>
+            <div class="field"><label for="matrixDensity">Rain Density</label><input id="matrixDensity" type="range" min="8" max="120" step="1" /></div>
+            <div class="field"><label for="matrixSpeed">Rain Speed</label><input id="matrixSpeed" type="range" min="6" max="60" step="1" /></div>
+            <label class="server-toggle"><input id="voiceEnabled" type="checkbox" /> Speak assistant replies</label>
+            <div class="field voice-row" style="margin-top:0.75rem;">
+              <div><label for="voiceSelect">Companion Voice</label><select id="voiceSelect"></select></div>
+              <button id="testVoiceButton" type="button">Test</button>
+            </div>
+            <div class="row">
+              <button id="openEmotionModalButton" type="button">Edit Mascot Messages</button>
+            </div>
+            <div class="row">
+              <button id="applyThemeButton" type="button">Preview</button>
+              <button id="saveUiSettingsButton" class="primary" type="button">Save Settings</button>
+            </div>
+            <div class="hint" id="settingsStatus">Settings persist on this local Flask app.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="modal-backdrop" id="dayEventsModal">
+        <div class="modal">
+          <h2 id="dayEventsTitle">Day Events</h2>
+          <div class="row"><select id="taskSort"><option value="time">Sort by time</option><option value="title">Sort by name</option><option value="urgency">Sort by urgency</option><option value="date">Sort by date</option><option value="completion">Sort by completion</option><option value="ignored">Sort by ignored</option></select><button id="newTaskForDayButton" type="button">New Event</button><button id="closeDayEventsButton" type="button">Close</button></div>
+          <div class="event-list-box"><table class="event-table" id="dayEventsTable"><thead><tr><th>Time</th><th>Title</th><th>Urgency</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="modal-backdrop" id="taskModal">
+        <div class="modal">
+          <h2 id="taskModalTitle">Task</h2>
+          <input id="taskEditId" type="hidden" />
+          <div class="field"><label for="taskTitle">Title</label><input id="taskTitle" type="text" /></div>
+          <div class="field"><label for="taskSubtext">Subtext</label><textarea id="taskSubtext"></textarea></div>
+          <div class="row"><div class="field"><label for="taskDate">Date</label><input id="taskDate" type="date" /></div><div class="field"><label for="taskTime">Time</label><input id="taskTime" type="time" /></div></div>
+          <div class="field"><label for="taskLocation">Location</label><input id="taskLocation" type="text" /></div>
+          <div class="row"><div class="field"><label for="taskUrgency">Urgency</label><select id="taskUrgency"><option>Low</option><option selected>Normal</option><option>High</option><option>Critical</option></select></div><div class="field"><label for="taskStatus">Status</label><select id="taskStatus"><option>Open</option><option>In Progress</option><option>Complete</option><option>Ignored</option></select></div></div>
+          <label class="server-toggle"><input id="taskAllDay" type="checkbox" /> All day</label>
+          <div class="field" style="margin-top:0.75rem;"><label for="taskFiles">Attachments</label><input id="taskFiles" type="file" multiple accept=".zip,.pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg,.webp" /></div>
+          <div class="row"><button id="saveTaskButton" type="button">Save Task</button><button id="discardTaskButton" type="button">Discard</button><button id="closeTaskButton" type="button">Close</button></div>
+        </div>
+      </div>
+
+      <div class="modal-backdrop" id="extensionModal">
+        <div class="modal">
+          <h2>Extension Details</h2>
+          <input id="extensionId" type="hidden" />
+          <div class="field"><label for="extensionName">Extension Name</label><input id="extensionName" type="text" /></div>
+          <div class="field"><label for="extensionDeveloper">Developer</label><input id="extensionDeveloper" type="text" /></div>
+          <div class="field"><label for="extensionBusiness">Business Name Optional</label><input id="extensionBusiness" type="text" /></div>
+          <div class="field"><label for="extensionPurpose">Purpose</label><textarea id="extensionPurpose"></textarea></div>
+          <div class="row"><button id="saveExtensionButton" type="button">Save Extension</button><button id="authExtensionButton" type="button">Send Auth Process</button><button id="closeExtensionButton" type="button">Close</button></div>
+        </div>
+      </div>
+
+      <div class="modal-backdrop" id="tokenModal">
+        <div class="modal">
+          <h2>Context Ratio Settings</h2>
+          <div class="field"><label for="tokenWindowInput">Model Context Tokens</label><input id="tokenWindowInput" type="number" min="1024" step="1024" value="8192" /></div>
+          <div class="field"><label for="manualUsedTokens">Manual Used Tokens</label><input id="manualUsedTokens" type="number" min="0" step="1" placeholder="Optional override" /></div>
+          <div class="hint" id="tokenModalSummary">Click Save to recalibrate the ring.</div>
+          <h2 style="margin-top:1rem;">Recent Context Token Load</h2>
+          <div class="token-file-grid" id="tokenFileGrid"></div>
+          <div class="row"><button id="saveTokenSettingsButton" type="button">Save Ratio</button><button id="refreshTokenConnectionButton" type="button">Reset Connection</button><button id="closeTokenModalButton" type="button">Close</button></div>
+        </div>
+      </div>
+      <input class="hidden-input" id="emotionPresetInput" type="file" accept=".txt,.json" multiple />
+
+      <div class="modal-backdrop" id="emotionModal">
+        <div class="modal">
+          <h2>Mascot Message Presets</h2>
+          <div class="field">
+            <label for="emotionPresetText">Private Messages</label>
+            <textarea id="emotionPresetText" placeholder="One private mascot message per line..."></textarea>
+          </div>
+          <div class="row"><button id="saveEmotionTextButton" type="button">Save Mascot Messages</button><button id="closeEmotionModalButton" type="button">Close</button></div>
+        </div>
+      </div>
+
+      <div class="modal-backdrop" id="agentModal">
+        <div class="modal">
+          <h2>Agent Preset</h2>
+          <div class="field"><label for="agentModalName">Agent Name</label><input id="agentModalName" type="text" /></div>
+          <div class="field"><label for="agentModalType">Agent Type</label><select id="agentModalType"><option>Chat</option><option>Agent</option><option>Developer</option><option>School</option><option>Research</option><option>Cybersecurity</option></select></div>
+          <div class="field"><label for="agentModalPolicy">Code Execution</label><select id="agentModalPolicy"><option value="ask">Ask Before Execution</option><option value="auto">Automate All</option></select></div>
+          <div class="field"><label for="agentModalCreator">Creator</label><input id="agentModalCreator" type="text" placeholder="Joel De Alba" /></div>
+          <div class="field"><label for="agentModalEmail">Email</label><input id="agentModalEmail" type="email" placeholder="name@example.com" /></div>
+          <div class="field"><label for="agentModalInstruction">Instructions</label><textarea id="agentModalInstruction" placeholder="How this agent should behave..."></textarea></div>
+          <div class="row"><button id="saveAgentModalButton" type="button">Save Preset</button><button id="exportAgentButton" type="button">Export Preset</button><button id="importAgentButton" type="button">Import Preset</button><button id="emailAgentButton" type="button">Prepare Email</button><button id="loadEmotionPresetsButton" type="button">Load Emotion Presets</button><button id="closeAgentModalButton" type="button">Close</button></div>
+        </div>
+      </div>
+
+      <aside class="nexuz-companion" id="mascotBox" title="NEXUZ companion">
+        <div class="mascot-comment" id="mascotComment">What's up?</div>
+        <img id="mascotImage" src="{{ url_for('static', filename='mascot/idle.png') }}" alt="GLIKCH assistant mascot" />
+        <div class="mascot-caption" id="mascotCaption">Idle</div>
+      </aside>
+
+      <form class="composer" id="chatForm">
+        <div class="composer-main">
+          <div class="composer-controls">
+            <select id="model" aria-label="LM Studio model">
+              <option value="">LM Studio loaded model</option>
+            </select>
+            <select id="interactionMode" aria-label="Interaction mode">
+              <option>Chat</option>
+              <option>Agent</option>
+              <option>Developer</option>
+              <option>School</option>
+              <option>Research</option>
+              <option>Cybersecurity</option>
+            </select>
+            <select id="executionPolicy" aria-label="Execution policy">
+              <option value="ask">Ask Before Execution</option>
+              <option value="auto">Automate All</option>
+            </select>
+            <select id="agentTemplate" aria-label="Agent template"></select>
+            <input id="agentNameInput" type="text" aria-label="Agent preset name" placeholder="Agent preset name" />
+            <button class="icon-button" id="saveAgentButton" type="button" title="Save agent template">Save</button>
+            <button class="icon-button" id="addAgentButton" type="button" title="Add agent template">+</button>
+            <button class="icon-button" id="removeAgentButton" type="button" title="Remove agent template">-</button>
+          </div>
+          <div class="debug-ticker" id="debugTicker" aria-live="polite"><div class="debug-ticker-line">NEXUZ debugger ready.</div></div>
+          <textarea id="prompt" placeholder="Ask your local model... Paste an image here or attach one."></textarea>
+          <div class="attachment-strip" id="attachmentStrip"></div>
+          <div class="live-status" id="liveStatus"><span class="live-dot"></span><span id="liveStatusText">Ready. Press Enter to send. Shift+Enter for newline.</span></div>
+        </div>
+        <div class="composer-actions">
+          <button class="token-widget" id="tokenWidget" type="button" title="Estimated context/token utilization">
+            <div class="token-ring" id="tokenRing"><span id="tokenPercent">0%</span></div>
+            <div class="token-detail" id="tokenDetail">0 used<br>131072 left<br>0 loaded</div>
+          </button>
+          <button class="icon-button mic-button" id="micButton" type="button" title="Voice input">Mic</button>
+          <button class="image-tray" id="attachImageButton" type="button" title="Attach images" aria-label="Attach images"></button>
+          <button class="send" id="sendButton" type="submit">Send</button>
+        </div>
+        <input class="hidden-input" id="imageInput" type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif" />
+      </form>
+    </div>
+
+    <script>
+      const state = { history: [], selectedConversationId: "", latestImportId: "", loadedContext: null, attachments: [], agentTemplates: [], serverEnabled: true, tasks: [], calendarDate: new Date(), selectedTaskDate: "", selectedTaskId: "", extensions: [], selectedExtensionId: "", pendingEnterConfirm: false, enterConfirmTimer: null, isSending: false, thinkingMessage: null, tokenWindow: Number(localStorage.getItem("glikchTokenWindow") || ({{ ui_settings|tojson }}.token_window || 131072)), lastUsage: null, tokenWarningShown: false, resetCount: Number(sessionStorage.getItem("glikchResetCount") || 0), loadedFileCount: 0, emotionPresets: [], recentContextItems: [], recognition: null, voices: [], debugLines: [], uiSettings: {{ ui_settings|tojson }} };
+      const $ = (id) => document.getElementById(id);
+
+      const initialId = `lmstudio-chat-${new Date().toISOString().replace(/[-:]/g, "").slice(0, 15)}`;
+      $("conversationId").value = initialId;
+
+      function addCrumb(label, tone = "") {
+        const crumb = document.createElement("span");
+        crumb.className = `crumb ${tone}`.trim();
+        crumb.textContent = `${new Date().toLocaleTimeString()} ${label}`;
+        $("breadcrumbs").appendChild(crumb);
+        updateReadyState(tone === "bad" ? "warn" : "ready");
+        while ($("breadcrumbs").children.length > 8) {
+          $("breadcrumbs").removeChild($("breadcrumbs").firstElementChild);
+        }
+        $("breadcrumbs").scrollLeft = $("breadcrumbs").scrollWidth;
+      }
+
+      async function runAction(button, label, action) {
+        const original = button.textContent;
+        button.classList.add("button-active");
+        button.disabled = true;
+        button.textContent = `${label}...`;
+        addCrumb(`${label} started`);
+        try {
+          const result = await action();
+          addCrumb(`${label} complete`, "ok");
+          return result;
+        } catch (error) {
+          addCrumb(`${label} failed`, "bad");
+          showError(error.message);
+          await loadLogs().catch(() => {});
+          throw error;
+        } finally {
+          button.disabled = false;
+          button.textContent = original;
+          button.classList.remove("button-active");
+        }
+      }
+
+      function updateReadyState(stateName) {
+        const crumb = $("readyCrumb");
+        crumb.className = `crumb ${stateName}`;
+        crumb.textContent = state.serverEnabled ? (stateName === "warn" ? "Halted" : "Ready") : "Stopped";
+      }
+
+      function renderDebugTicker() {
+        const ticker = $("debugTicker");
+        if (!ticker) return;
+        ticker.innerHTML = "";
+        const lines = state.debugLines.slice(0, 4);
+        if (!lines.length) {
+          const empty = document.createElement("div");
+          empty.className = "debug-ticker-line";
+          empty.textContent = "NEXUZ debugger ready.";
+          ticker.appendChild(empty);
+          return;
+        }
+        lines.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = `debug-ticker-line ${item.tone === "ERROR" ? "error" : item.tone === "OK" ? "ok" : ""}`.trim();
+          row.textContent = item.line;
+          ticker.appendChild(row);
+        });
+      }
+
+      function appendDeveloperLog(message, tone = "INFO") {
+        const stamp = new Date().toLocaleTimeString();
+        const line = `[${stamp}] ${tone}: ${message}`;
+        const current = $("logView").textContent || "";
+        $("logView").textContent = current.includes("Select a dated log") ? line : `${line}
+${current}`;
+        state.debugLines = [{ line, tone }, ...state.debugLines].slice(0, 16);
+        renderDebugTicker();
+      }
+
+      function setLiveStatus(message, mode = "") {
+        const box = $("liveStatus");
+        box.className = `live-status ${mode}`.trim();
+        box.classList.toggle("active", !!mode);
+        $("liveStatusText").innerHTML = message;
+      }
+
+      function showError(message) {
+        $("error").textContent = message;
+        $("error").style.display = message ? "block" : "none";
+        if (message) {
+          setLiveStatus(`Error: ${message}`, "error");
+          appendDeveloperLog(message, "ERROR");
+        }
+        updateReadyState(message ? "warn" : "ready");
+      }
+
+      function selectedAgentName() {
+        return ($("agentNameInput").value || $("agentTemplate").value || "Unnamed Agent").trim();
+      }
+
+      const mascotAssets = {
+        idle: "{{ url_for('static', filename='mascot/idle.png') }}",
+        thinking: "{{ url_for('static', filename='mascot/thinking.png') }}",
+        curious: "{{ url_for('static', filename='mascot/curious.png') }}",
+        focused: "{{ url_for('static', filename='mascot/focused.png') }}",
+        annoyed: "{{ url_for('static', filename='mascot/annoyed.png') }}",
+      };
+
+      const defaultMascotComments = [
+        "What's up, Joel? NEXUZ is awake and watching the workload.",
+        "Hey! What's on your mind? We can break it down one clean step at a time.",
+        "Did you drink water today? Small maintenance keeps the operator online.",
+        "How are Geoff, your friends, and your family doing today?",
+        "Have you checked your assignments? I can help turn the messy parts into a plan.",
+        "Need a second pair of eyes on code, context, or school docs? Send it in.",
+        "If the workload feels heavy, compress the context and keep moving.",
+        "I am here, Joel. Projects, research, memory, security: one console.",
+        "Want me in Developer, School, Cybersecurity, or Agent mode for this next move?",
+      ];
+      let inactivityTimer = null;
+
+      function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          addCrumb("Inactivity logout", "bad");
+          document.querySelector('form[action="{{ url_for('logout') }}"]').requestSubmit();
+        }, 5 * 60 * 1000);
+      }
+
+      function tasksDueToday() {
+        const today = new Date().toISOString().slice(0, 10);
+        return state.tasks.filter((task) => task.date === today).length;
+      }
+
+      function updateCyberClock() {
+        const now = new Date();
+        const time = now.toLocaleTimeString([], { hour12: true });
+        const date = now.toLocaleDateString([], { weekday: "short", year: "numeric", month: "short", day: "numeric" });
+        $("cyberClock").innerHTML = `<strong>${time}</strong><br>${date}<br>Resets: ${state.resetCount} | Files: ${state.loadedFileCount} | Due today: ${tasksDueToday()}`;
+      }
+
+      function showMascotComment(text = "") {
+        if (state.uiSettings && state.uiSettings.mascot_enabled === false) return;
+        const presets = state.emotionPresets.length ? state.emotionPresets : defaultMascotComments;
+        const message = text || presets[Math.floor(Math.random() * presets.length)] || "NEXUZ is online.";
+        const bubble = $("mascotComment");
+        if (!bubble) return;
+        bubble.textContent = message;
+        bubble.classList.remove("active");
+        void bubble.offsetWidth;
+        bubble.classList.add("active");
+        bubble.setAttribute("aria-live", "polite");
+        setMascot(message.includes("?") ? "curious" : "idle");
+        clearTimeout(showMascotComment.timer);
+        clearTimeout(showMascotComment.unlockTimer);
+        showMascotComment.locked = true;
+        showMascotComment.unlockTimer = setTimeout(() => { showMascotComment.locked = false; }, 5000);
+        showMascotComment.timer = setTimeout(() => bubble.classList.remove("active"), 5000);
+      }
+
+      function openTokenModal() {
+        $("tokenWindowInput").value = state.tokenWindow;
+        $("manualUsedTokens").value = state.lastUsage && state.lastUsage.total_tokens ? state.lastUsage.total_tokens : "";
+        $("tokenModalSummary").textContent = `Current ratio: ${state.lastUsage ? state.lastUsage.percent_used : 0}% used of ${state.tokenWindow} tokens.`;
+        renderTokenFileGrid();
+        $("tokenModal").classList.add("active");
+      }
+
+      function estimateTokens(value) {
+        const text = typeof value === "string" ? value : JSON.stringify(value || "");
+        return Math.max(text ? 1 : 0, Math.ceil(text.length / 4));
+      }
+
+      function rememberContextItems(files, sourceLabel = "import") {
+        const rows = Array.from(files || []).map((file) => {
+          const name = file.filename || file.name || sourceLabel;
+          const format = file.detected_format || file.type || "context";
+          const sourceText = file.text_preview || file.context || file.name || name;
+          const tokens = file.tokens || estimateTokens(sourceText || name);
+          return { name, format, tokens, source: sourceLabel, when: new Date().toLocaleTimeString() };
+        });
+        state.recentContextItems = [...rows, ...state.recentContextItems].slice(0, 5);
+      }
+
+      function renderTokenFileGrid() {
+        const grid = $("tokenFileGrid");
+        grid.innerHTML = "";
+        const items = state.recentContextItems.slice(0, 5);
+        if (!items.length) {
+          const row = document.createElement("div");
+          row.className = "hint";
+          row.textContent = "No imported files in this browser session yet.";
+          grid.appendChild(row);
+          return;
+        }
+        items.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "token-file-row";
+          row.innerHTML = `<strong title="${item.name}">${item.name}</strong><span>${item.format}</span><span>${item.tokens} tok</span>`;
+          grid.appendChild(row);
+        });
+      }
+
+      function updateTokenMeter(usage = null) {
+        const loaded = state.loadedContext && state.loadedContext.context ? estimateTokens(state.loadedContext.context) : 0;
+        const fileTokens = state.recentContextItems.reduce((sum, item) => sum + Number(item.tokens || 0), 0);
+        const historyTokens = estimateTokens(state.history.map((item) => item.content || "").join("\n"));
+        const promptTokens = usage && usage.prompt_tokens ? Number(usage.prompt_tokens) : loaded + historyTokens;
+        const completionTokens = usage && usage.completion_tokens ? Number(usage.completion_tokens) : 0;
+        const serverContextTokens = usage && usage.context_tokens ? Number(usage.context_tokens) : 0;
+        const serverTotal = usage && usage.total_tokens ? Number(usage.total_tokens) : 0;
+        const estimatedTotal = loaded + fileTokens + historyTokens + completionTokens;
+        const total = Math.max(serverTotal, serverContextTokens + completionTokens, estimatedTotal);
+        const rawPercent = state.tokenWindow ? Math.min(100, (total / state.tokenWindow) * 100) : 0;
+        const percent = rawPercent > 0 && rawPercent < 1 ? Number(rawPercent.toFixed(2)) : Number(rawPercent.toFixed(1));
+        const ringPercent = Math.max(rawPercent > 0 ? 0.6 : 0, rawPercent);
+        const remaining = Math.max(0, state.tokenWindow - total);
+        const color = rawPercent >= 95 ? "#ff2233" : rawPercent >= 70 ? "var(--danger)" : rawPercent >= 40 ? "#ffb84d" : "var(--ok)";
+        $("tokenRing").style.background = `conic-gradient(${color} ${Math.min(360, ringPercent * 3.6)}deg, #230b0d 0deg)`;
+        $("tokenPercent").textContent = rawPercent > 0 && rawPercent < 1 ? "<1%" : `${percent}%`;
+        $("tokenRing").title = `${total} used / ${state.tokenWindow} tokens`;
+        $("tokenDetail").innerHTML = `${total} used<br>${remaining} left<br>${loaded + fileTokens} loaded`;
+        state.lastUsage = { prompt_tokens: promptTokens, completion_tokens: completionTokens, total_tokens: total, loaded_tokens: loaded + fileTokens, history_tokens: historyTokens, remaining_tokens: remaining, percent_used: percent, usage_source: usage && usage.usage_source ? usage.usage_source : "estimated" };
+        localStorage.setItem("glikchTokenWindow", String(state.tokenWindow));
+        setMascot(rawPercent >= 75 ? "annoyed" : "idle");
+        if (rawPercent >= 95 && !state.tokenWarningShown) {
+          state.tokenWarningShown = true;
+          showMascotComment("Context is above 95%. Compress and reset now so I can preserve the work and keep going cleanly.");
+          setLiveStatus("Context is above 95%. Compress + Reset is recommended before the next large request.", "error");
+          addCrumb("Token pressure 95%", "bad");
+          openTokenModal();
+        } else if (rawPercent < 90) {
+          state.tokenWarningShown = false;
+        }
+      }
+
+      function setMascot(mood) {
+        const captions = { idle: "Idle", thinking: "Thinking", curious: "Curious", focused: "Focused", annoyed: "Heavy Load" };
+        if (!mascotAssets[mood]) mood = "idle";
+        $("mascotImage").src = mascotAssets[mood];
+        $("mascotCaption").textContent = captions[mood] || mood;
+      }
+
+      function updateCompressionEstimate(estimate) {
+        if (!estimate) {
+          const contextTokens = state.loadedContext && state.loadedContext.context ? estimateTokens(state.loadedContext.context) : 0;
+          $("compressionEstimate").textContent = `Compression estimate: loaded context would use about ${contextTokens} initial tokens.`;
+          return;
+        }
+        $("compressionEstimate").textContent = `Compression estimate: compact bundle ~${estimate.compact_tokens} tokens (${estimate.compact_percent}% of ${estimate.window}); current context ~${estimate.context_tokens} tokens.`;
+      }
+
+      function syntaxHighlightJson(value) {
+        const json = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+        return json.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+          .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+            let cls = "json-number";
+            if (/^"/.test(match)) cls = /:$/.test(match) ? "json-key" : "json-string";
+            else if (/true|false/.test(match)) cls = "json-bool";
+            return `<span class="${cls}">${match}</span>`;
+          });
+      }
+
+      function renderMessagesPreview() {
+        try {
+          $("messagesPreview").innerHTML = syntaxHighlightJson(JSON.parse($("selectedMessages").value || "[]"));
+        } catch (error) {
+          $("messagesPreview").textContent = "Invalid JSON.";
+        }
+      }
+
+      function humanizeAssistantText(content) {
+        const cleaned = String(content || "").trim();
+        if (!cleaned) return "";
+        const labelize = (value) => String(value).replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
+        const stringify = (value, depth = 0) => {
+          if (depth > 6 || value === null || value === undefined) return "";
+          if (typeof value === "string") return value.trim();
+          if (typeof value === "number" || typeof value === "boolean") return String(value);
+          if (Array.isArray(value)) {
+            return value.map((item) => {
+              const text = stringify(item, depth + 1);
+              return text && !text.includes("\n") ? `- ${text}` : text;
+            }).filter(Boolean).join("\n");
+          }
+          if (typeof value === "object") {
+            return Object.entries(value).map(([key, item]) => {
+              const text = stringify(item, depth + 1);
+              if (!text) return "";
+              return typeof item === "object" ? `${labelize(key)}:\n${text}` : `${labelize(key)}: ${text}`;
+            }).filter(Boolean).join("\n\n");
+          }
+          return "";
+        };
+        try {
+          const parsed = JSON.parse(cleaned);
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            const keys = ["response", "answer", "message", "content", "text", "greeting", "summary", "result"];
+            for (const key of keys) {
+              if (typeof parsed[key] === "string" && parsed[key].trim()) return parsed[key].trim();
+            }
+            return stringify(parsed) || cleaned;
+          }
+          if (Array.isArray(parsed)) {
+            return stringify(parsed) || parsed.map((value) => typeof value === "string" ? value : JSON.stringify(value)).filter(Boolean).join("\n\n");
+          }
+          return String(parsed);
+        } catch (error) {
+          return cleaned;
+        }
+      }
+
+      function appendMessage(role, content, options = {}) {
+        const empty = $("emptyState");
+        if (empty) empty.style.display = "none";
+        const article = document.createElement("article");
+        article.className = `message ${role}`;
+        if (options.transient) article.classList.add("transient");
+        const roleEl = document.createElement("span");
+        roleEl.className = "role";
+        roleEl.textContent = role === "assistant" ? selectedAgentName() : "You";
+        const contentEl = document.createElement("div");
+        if (options.html) {
+          contentEl.innerHTML = content;
+        } else if (role === "assistant") {
+          renderAssistantContent(contentEl, content);
+        } else {
+          contentEl.textContent = content;
+        }
+        article.append(roleEl, contentEl);
+        $("messages").appendChild(article);
+        $("messages").scrollTop = $("messages").scrollHeight;
+        return article;
+      }
+
+      function renderAssistantContent(container, content) {
+        const regex = /```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g;
+        let lastIndex = 0;
+        let match;
+        while ((match = regex.exec(content)) !== null) {
+          const before = content.slice(lastIndex, match.index);
+          if (before.trim()) {
+            const text = document.createElement("div");
+            text.textContent = before.trim();
+            container.appendChild(text);
+          }
+          const block = document.createElement("div");
+          block.className = "code-block";
+          const button = document.createElement("button");
+          button.className = "copy-code";
+          button.type = "button";
+          button.textContent = "Copy";
+          const pre = document.createElement("pre");
+          const code = document.createElement("code");
+          code.textContent = match[2].trim();
+          pre.appendChild(code);
+          button.addEventListener("click", async () => {
+            await navigator.clipboard.writeText(code.textContent);
+            button.textContent = "Copied";
+            setTimeout(() => { button.textContent = "Copy"; }, 1200);
+          });
+          block.append(button, pre);
+          container.appendChild(block);
+          lastIndex = regex.lastIndex;
+        }
+        const tail = content.slice(lastIndex);
+        if (tail.trim() || !container.children.length) {
+          const text = document.createElement("div");
+          text.textContent = tail.trim() || content;
+          container.appendChild(text);
+        }
+      }
+
+      async function getJson(url, options) {
+        let response;
+        const requestOptions = { ...(options || {}) };
+        const timeoutMs = requestOptions.timeoutMs || 0;
+        delete requestOptions.timeoutMs;
+        let timeoutId = null;
+        const controller = timeoutMs && "AbortController" in window ? new AbortController() : null;
+        if (controller) {
+          requestOptions.signal = controller.signal;
+          timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        }
+        try {
+          response = await fetch(url, { credentials: "same-origin", cache: "no-store", ...requestOptions });
+        } catch (error) {
+          if (error.name === "AbortError") throw new Error("Request timed out. LM Studio may be stalled or the model may be unloaded.");
+          return requestJsonWithXhr(url, options);
+        } finally {
+          if (timeoutId) clearTimeout(timeoutId);
+        }
+        const contentType = response.headers.get("Content-Type") || "";
+        const data = contentType.includes("application/json") ? await response.json() : { error: await response.text() };
+        if (response.status === 401) throw new Error("Session expired. Log in again, then retry.");
+        if (!response.ok) throw new Error(data.error || "Request failed.");
+        return data;
+      }
+
+      function requestJsonWithXhr(url, options = {}) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open(options.method || "GET", url, true);
+          xhr.withCredentials = true;
+          xhr.timeout = 300000;
+          const headers = options.headers || {};
+          Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
+          xhr.onload = () => {
+            let data = {};
+            try {
+              data = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+            } catch (error) {
+              data = { error: xhr.responseText || "Request failed." };
+            }
+            if (xhr.status === 401) {
+              reject(new Error("Session expired. Log in again, then retry."));
+            } else if (xhr.status < 200 || xhr.status >= 300) {
+              reject(new Error(data.error || `Request failed with HTTP ${xhr.status}.`));
+            } else {
+              resolve(data);
+            }
+          };
+          xhr.onerror = () => reject(new Error("Could not reach the local Flask API through fetch or XHR. Use Reset All, then log in again."));
+          xhr.ontimeout = () => reject(new Error("The local Flask API timed out waiting for LM Studio."));
+          xhr.send(options.body || null);
+        });
+      }
+
+      function selectedModel() {
+        const value = $("model").value || "";
+        const templateMarker = String.fromCharCode(123, 123);
+        return value.includes(templateMarker) ? "" : value;
+      }
+
+      async function loadAgentTemplates() {
+        const data = await getJson("/api/agent-templates");
+        const byName = new Map();
+        (data.templates || []).forEach((template) => {
+          const name = (template.name || "Unnamed Agent").trim();
+          if (!byName.has(name.toLowerCase())) byName.set(name.toLowerCase(), { ...template, name });
+        });
+        state.agentTemplates = Array.from(byName.values());
+        const previous = $("agentTemplate").value;
+        $("agentTemplate").innerHTML = "";
+        state.agentTemplates.forEach((template) => {
+          const option = document.createElement("option");
+          option.value = template.name || "Unnamed Agent";
+          option.textContent = template.name || "Unnamed Agent";
+          $("agentTemplate").appendChild(option);
+        });
+        if (!$("agentTemplate").children.length) {
+          const option = document.createElement("option");
+          option.value = "Unnamed Agent";
+          option.textContent = "Unnamed Agent";
+          $("agentTemplate").appendChild(option);
+        }
+        if (previous && Array.from($("agentTemplate").options).some((option) => option.value === previous)) {
+          $("agentTemplate").value = previous;
+        }
+        syncAgentEditor();
+      }
+
+      function syncAgentEditor() {
+        const template = state.agentTemplates.find((item) => item.name === $("agentTemplate").value);
+        $("agentNameInput").value = $("agentTemplate").value || "Unnamed Agent";
+        if (template && template.mode) $("interactionMode").value = template.mode;
+        if (template && template.execution_policy) $("executionPolicy").value = template.execution_policy;
+      }
+
+      function setImportLog(importData) {
+        if (!importData) {
+          $("importLog").textContent = "No imported context loaded.";
+          return;
+        }
+        const lines = [
+          `Import ID: ${importData.import_id}`,
+          `Created: ${importData.created}`,
+          "",
+          ...importData.files.map((file) => {
+            const result = `${file.filename} -> ${file.detected_format} [${file.status}]`;
+            return file.error ? `${result}\n  ${file.error}` : result;
+          }),
+        ];
+        $("importLog").textContent = lines.join("\n");
+      }
+
+      const themePresets = {
+        "crimson-violet": ["#ff2a3d", "#ff6a00", "#ffd000", "#ff2fd6", "#7b2cff", "#13e8ff"],
+        "ember-gold": ["#ff342e", "#ff7a18", "#ffe15c", "#ff3f8f", "#6d3cff", "#00d8ff"],
+        "magenta-cyan": ["#ff2fd6", "#9d35ff", "#13e8ff", "#ff3347", "#3b7cff", "#ffe866"],
+        "toxic-terminal": ["#24ff72", "#b6ff2e", "#fff04a", "#00d4ff", "#ff2a3d", "#8dffef"],
+      };
+
+      function collectUiSettings() {
+        return {
+          login_wallpaper: $("loginWallpaperUrl").value.trim(),
+          app_wallpaper: $("appWallpaperUrl").value.trim(),
+          app_logo: $("logoUrl").value.trim(),
+          logo_scale: Number($("logoScale").value || 1),
+          logo_offset_x: Number($("logoOffsetX").value || 0),
+          logo_offset_y: Number($("logoOffsetY").value || 0),
+          mascot_scale: Number($("mascotScale").value || 1),
+          login_position: $("loginPosition").value,
+          theme_preset: $("themePreset").value,
+          border_strength: Number($("borderStrength").value || 1),
+          glow_strength: Number($("glowStrength").value || 0.75),
+          accent_colors: Array.from({ length: 6 }, (_, index) => $(`accentColor${index}`).value),
+          exterior_border_color: $("exteriorBorderColor").value,
+          chrome_alpha: Number($("chromeAlpha").value || 0.72),
+          neon_enabled: $("neonEnabled").checked,
+          mascot_enabled: $("mascotEnabled").checked,
+          voice_enabled: $("voiceEnabled").checked,
+          voice_name: $("voiceSelect").value,
+          default_model: selectedModel(),
+          token_window: Number(state.tokenWindow || 131072),
+          matrix_enabled: $("matrixEnabled").checked,
+          matrix_charset: $("matrixCharset").value.trim(),
+          matrix_emoji_enabled: $("matrixEmojiEnabled").checked,
+          matrix_color_top: $("matrixColorTop").value,
+          matrix_color_mid: $("matrixColorMid").value,
+          matrix_color_tail: $("matrixColorTail").value,
+          matrix_text_color: $("matrixTextColor").value,
+          matrix_glow_color: $("matrixGlowColor").value,
+          matrix_glow_strength: Number($("matrixGlowStrength").value || 1),
+          matrix_text_size: Number($("matrixTextSize").value || 0.78),
+          matrix_distance: Number($("matrixDistance").value || 230),
+          matrix_density: Number($("matrixDensity").value || 42),
+          matrix_speed: Number($("matrixSpeed").value || 18),
+        };
+      }
+
+      function applyUiSettings(settings) {
+        state.uiSettings = { ...state.uiSettings, ...settings };
+        const colors = state.uiSettings.accent_colors || themePresets["crimson-violet"];
+        ["nexuz-a", "nexuz-b", "nexuz-c", "nexuz-d", "nexuz-e", "nexuz-f"].forEach((name, index) => {
+          document.documentElement.style.setProperty(`--${name}`, colors[index]);
+        });
+        document.documentElement.style.setProperty("--accent", colors[0]);
+        document.documentElement.style.setProperty("--accent-2", colors[3] || colors[0]);
+        document.documentElement.style.setProperty("--border-strength", state.uiSettings.border_strength || 1);
+        document.documentElement.style.setProperty("--glow-strength", state.uiSettings.neon_enabled === false ? 0 : (state.uiSettings.glow_strength || 0.75));
+        document.documentElement.style.setProperty("--chrome-alpha", state.uiSettings.chrome_alpha || 0.72);
+        document.documentElement.style.setProperty("--exterior-border", state.uiSettings.exterior_border_color || colors[5] || colors[0]);
+        document.documentElement.style.setProperty("--logo-scale", state.uiSettings.logo_scale || 1);
+        document.documentElement.style.setProperty("--logo-offset-x", `${state.uiSettings.logo_offset_x || 0}px`);
+        document.documentElement.style.setProperty("--logo-offset-y", `${state.uiSettings.logo_offset_y || 0}px`);
+        document.documentElement.style.setProperty("--mascot-scale", state.uiSettings.mascot_scale || 1);
+        document.documentElement.style.setProperty("--matrix-top", state.uiSettings.matrix_color_top || "#ff7a7a");
+        document.documentElement.style.setProperty("--matrix-mid", state.uiSettings.matrix_color_mid || "#ff1f33");
+        document.documentElement.style.setProperty("--matrix-tail", state.uiSettings.matrix_color_tail || "#3b0008");
+        document.documentElement.style.setProperty("--matrix-text", state.uiSettings.matrix_text_color || "#ff3038");
+        document.documentElement.style.setProperty("--matrix-glow", state.uiSettings.matrix_glow_color || "#ff1f33");
+        document.documentElement.style.setProperty("--matrix-glow-strength", state.uiSettings.matrix_glow_strength || 1);
+        document.documentElement.style.setProperty("--matrix-distance", `${state.uiSettings.matrix_distance || 230}vh`);
+        if (state.uiSettings.token_window) state.tokenWindow = Number(state.uiSettings.token_window);
+        document.body.classList.toggle("neon-off", state.uiSettings.neon_enabled === false);
+        document.body.classList.toggle("mascot-off", state.uiSettings.mascot_enabled === false);
+        if (state.uiSettings.app_wallpaper) {
+          document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.72)), radial-gradient(circle at 50% 18%, rgba(186, 20, 255, 0.15), transparent 26rem), url("${state.uiSettings.app_wallpaper}" )`;
+          document.body.style.backgroundPosition = "center";
+          document.body.style.backgroundSize = "cover";
+          document.body.style.backgroundAttachment = "fixed";
+        }
+        if (state.uiSettings.app_logo && $("appLogo")) $("appLogo").src = state.uiSettings.app_logo;
+        if ($("loginWallpaperPreview")) $("loginWallpaperPreview").style.backgroundImage = `url("${state.uiSettings.login_wallpaper || ""}")`;
+        if ($("appWallpaperPreview")) $("appWallpaperPreview").style.backgroundImage = `url("${state.uiSettings.app_wallpaper || ""}")`;
+        if ($("logoPreview")) $("logoPreview").style.backgroundImage = `url("${state.uiSettings.app_logo || ""}")`;
+        renderMatrixRain();
+        updateTokenMeter(state.lastUsage);
+      }
+
+      function hydrateSettingsForm() {
+        const settings = state.uiSettings || {};
+        $("loginWallpaperUrl").value = settings.login_wallpaper || "";
+        $("appWallpaperUrl").value = settings.app_wallpaper || "";
+        $("logoUrl").value = settings.app_logo || "";
+        $("logoScale").value = settings.logo_scale || 1;
+        $("logoOffsetX").value = settings.logo_offset_x || 0;
+        $("logoOffsetY").value = settings.logo_offset_y || 0;
+        $("mascotScale").value = settings.mascot_scale || 1;
+        $("loginPosition").value = settings.login_position || "center";
+        $("themePreset").value = settings.theme_preset || "crimson-violet";
+        $("borderStrength").value = settings.border_strength || 1;
+        $("glowStrength").value = settings.glow_strength || 0.75;
+        $("chromeAlpha").value = settings.chrome_alpha || 0.72;
+        $("exteriorBorderColor").value = settings.exterior_border_color || "#13e8ff";
+        $("neonEnabled").checked = settings.neon_enabled !== false;
+        $("mascotEnabled").checked = settings.mascot_enabled !== false;
+        $("voiceEnabled").checked = !!settings.voice_enabled;
+        if ($("emotionPresetText")) $("emotionPresetText").value = (state.emotionPresets.length ? state.emotionPresets : defaultMascotComments).join("\n");
+        const colors = settings.accent_colors || themePresets["crimson-violet"];
+        colors.slice(0, 6).forEach((color, index) => { $(`accentColor${index}`).value = color; });
+        applyUiSettings(settings);
+      }
+
+      async function uploadWallpaper(kind, file) {
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("kind", kind);
+        formData.append("file", file, file.name);
+        const data = await getJson("/api/ui-settings/wallpaper", { method: "POST", body: formData });
+        state.uiSettings = data.settings || state.uiSettings;
+        hydrateSettingsForm();
+        addCrumb(`${kind === "login" ? "Login" : kind === "logo" ? "Logo" : "App"} asset saved`, "ok");
+      }
+
+      function renderMatrixRain() {
+        const layer = $("matrixRain");
+        if (!layer) return;
+        const settings = state.uiSettings || {};
+        layer.classList.toggle("hidden", settings.matrix_enabled === false);
+        if (settings.matrix_enabled === false) {
+          layer.innerHTML = "";
+          return;
+        }
+        const emojiSet = "?????????????????";
+        const charset = String(settings.matrix_charset || "01GLIKCHNEXUZ$#<>/{}[]()rootAI") + (settings.matrix_emoji_enabled ? emojiSet : "");
+        const density = Math.max(8, Math.min(120, Number(settings.matrix_density || 42)));
+        const speed = Math.max(6, Math.min(60, Number(settings.matrix_speed || 18)));
+        const textSize = Math.max(0.45, Math.min(1.4, Number(settings.matrix_text_size || 0.78)));
+        const signature = JSON.stringify({ charset, density, speed, textSize });
+        if (layer.dataset.signature === signature && layer.children.length) return;
+        layer.dataset.signature = signature;
+        layer.innerHTML = "";
+        const glyphs = Array.from(charset || "01");
+        const makeColumnText = () => Array.from({ length: 42 }, () => glyphs[Math.floor(Math.random() * glyphs.length)]).join("\n");
+        for (let index = 0; index < density; index += 1) {
+          const column = document.createElement("span");
+          column.className = "matrix-column";
+          column.textContent = makeColumnText();
+          column.style.left = `${Math.random() * 100}%`;
+          column.style.animationDuration = `${Math.max(5, speed + Math.random() * speed)}s`;
+          column.style.animationDelay = `${Math.random() * -speed}s`;
+          column.style.opacity = String(0.18 + Math.random() * 0.38);
+          column.style.fontSize = `${textSize * (0.82 + Math.random() * 0.42)}rem`;
+          layer.appendChild(column);
+        }
+      }
+
+      function renderImageTray() {
+        const tray = $("attachImageButton");
+        tray.innerHTML = "";
+        for (let index = 0; index < 12; index += 1) {
+          const slot = document.createElement("span");
+          const item = state.attachments[index];
+          slot.className = `image-slot ${item ? "occupied" : "empty"}`;
+          slot.dataset.index = String(index);
+          if (item) {
+            const img = document.createElement("img");
+            img.src = item.data_url;
+            img.alt = item.name;
+            slot.appendChild(img);
+          }
+          tray.appendChild(slot);
+        }
+      }
+
+      function renderAttachments() {
+        const strip = $("attachmentStrip");
+        strip.innerHTML = "";
+        strip.style.display = state.attachments.length ? "flex" : "none";
+        state.attachments.forEach((item, index) => {
+          const chip = document.createElement("span");
+          chip.className = "attachment-chip";
+          const img = document.createElement("img");
+          img.src = item.data_url;
+          img.alt = item.name;
+          const label = document.createElement("span");
+          label.textContent = item.name;
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.textContent = "x";
+          remove.style.minWidth = "24px";
+          remove.style.padding = "0.1rem 0.35rem";
+          remove.addEventListener("click", () => {
+            state.attachments.splice(index, 1);
+            renderAttachments();
+          });
+          chip.append(img, label, remove);
+          strip.appendChild(chip);
+        });
+        renderImageTray();
+      }
+
+      function compressImage(file, maxSide = 1280, quality = 0.82) {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          const reader = new FileReader();
+          reader.onload = () => {
+            image.onload = () => {
+              const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.max(1, Math.round(image.width * scale));
+              canvas.height = Math.max(1, Math.round(image.height * scale));
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL("image/jpeg", quality));
+            };
+            image.onerror = () => reject(new Error("Unable to decode image."));
+            image.src = reader.result;
+          };
+          reader.onerror = () => reject(new Error("Unable to read image."));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function addImageFile(file) {
+        if (!file || !file.type.startsWith("image/")) return Promise.resolve();
+        return compressImage(file).then((dataUrl) => {
+          const item = {
+            name: file.name || `pasted-image-${state.attachments.length + 1}.jpg`,
+            type: "image/jpeg",
+            data_url: dataUrl,
+          };
+          state.attachments.push(item);
+          rememberContextItems([{ name: item.name, type: item.type, tokens: estimateTokens(item.name) + Math.ceil(dataUrl.length / 4) }], "image");
+          renderAttachments();
+          addCrumb("Image attached", "ok");
+        });
+      }
+
+      async function addImageFiles(files) {
+        for (const file of Array.from(files || [])) {
+          await addImageFile(file);
+        }
+      }
+
+      async function uploadFiles(fileList, label) {
+        if (!fileList || fileList.length === 0) return;
+        const formData = new FormData();
+        Array.from(fileList).forEach((file) => formData.append("files", file, file.webkitRelativePath || file.name));
+        if ($("importZipPassword").value) formData.append("password", $("importZipPassword").value);
+        let data;
+        try {
+          data = await getJson("/api/import-memory", { method: "POST", body: formData });
+        } catch (error) {
+          if (String(error.message).toLowerCase().includes("password")) {
+            const password = prompt("Enter secure bundle password");
+            if (!password) throw error;
+            const retry = new FormData();
+            Array.from(fileList).forEach((file) => retry.append("files", file, file.webkitRelativePath || file.name));
+            retry.append("password", password);
+            data = await getJson("/api/import-memory", { method: "POST", body: retry });
+            $("importZipPassword").value = password;
+          } else {
+            throw error;
+          }
+        }
+        state.latestImportId = data.import.import_id;
+        state.loadedContext = data.compact;
+        state.loadedFileCount += data.import.files.length;
+        rememberContextItems(data.import.files, label);
+        updateCyberClock();
+        setImportLog(data.import);
+        $("exportResult").textContent = `${label} detected: ${data.import.files.length} file(s). Ready to load to LLM server.`;
+        updateTokenMeter();
+        updateCompressionEstimate();
+        if ((data.import.files || []).some((file) => file.detected_format === "secure-bundle" && file.status === "decrypted")) addCrumb("Secure bundle decrypted", "ok");
+        return data;
+      }
+
+      function download(format) {
+        if (!state.selectedConversationId) return;
+        window.location.href = `/api/export/${encodeURIComponent(state.selectedConversationId)}?format=${format}`;
+      }
+
+      async function downloadWithStatus(format) {
+        if (!state.selectedConversationId) return;
+        const response = await fetch(`/api/export/${encodeURIComponent(state.selectedConversationId)}?format=${format}`);
+        if (!response.ok) throw new Error("Export failed.");
+        const blob = await response.blob();
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const match = disposition.match(/filename=([^;]+)/);
+        const filename = match ? match[1].replaceAll('"', "") : `${state.selectedConversationId}.${format}`;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        $("exportResult").textContent = `Export complete: ${filename}`;
+      }
+
+      function downloadBundle(data) {
+        if (!data.bundle_zip_file) return;
+        const link = document.createElement("a");
+        link.href = `/api/download-export/${encodeURIComponent(data.bundle_zip_file)}`;
+        link.download = data.bundle_zip_file;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+
+      async function loadModels() {
+        try {
+          const data = await getJson("{{ url_for('api_models') }}");
+          if (Array.isArray(data.models) && data.models.length > 0) {
+            $("model").innerHTML = "";
+            data.models.forEach((model) => {
+              const option = document.createElement("option");
+              option.value = model;
+              option.textContent = model;
+              $("model").appendChild(option);
+            });
+            if (data.default && data.models.includes(data.default)) $("model").value = data.default;
+            else $("model").value = data.models[0];
+            state.uiSettings.default_model = $("model").value;
+            localStorage.setItem("glikchDefaultModel", $("model").value);
+            if (data.stale_default) addCrumb("Saved model not loaded; using current LM Studio model", "warn");
+          }
+          $("status").textContent = `LM Studio model list loaded. Default: ${selectedModel() || "loaded model"}`;
+        } catch (error) {
+          $("model").innerHTML = '<option value="">LM Studio loaded model</option>';
+          $("status").textContent = "LM Studio model list unavailable. Chat will try the loaded model.";
+        }
+      }
+
+      async function loadStatus() {
+        try {
+          const data = await getJson("/api/status");
+          if (data.context_window && !localStorage.getItem("glikchTokenWindow")) state.tokenWindow = Number(data.context_window);
+          updateTokenMeter(state.lastUsage);
+          $("systemStatus").innerHTML = `<span class="ok">Live</span><br>URL: ${data.lm_studio_url}<br>Default: ${data.default_model || selectedModel() || "Loaded model"}<br>Models: ${(data.models || []).join(", ") || "Loaded model"}<br>Context window: ${state.tokenWindow}<br>RAM: ${data.ram}<br>${data.stale_default ? "Saved model was stale and has been replaced.<br>" : ""}${data.note || ""}`;
+        } catch (error) {
+          $("systemStatus").innerHTML = `<span class="bad">Error</span><br>${error.message}<br>Open the latest dated log for context.`;
+        }
+      }
+
+      async function loadConversations() {
+        const data = await getJson("/api/conversations");
+        $("conversationList").innerHTML = "";
+        data.conversations.forEach((item) => {
+          const button = document.createElement("button");
+          button.className = "conversation-item";
+          button.type = "button";
+          button.dataset.id = item.id;
+          button.innerHTML = `<strong>${item.metadata.title || item.id}</strong><div class="meta">${item.id} Â· ${item.message_count || 0} messages</div>`;
+          button.addEventListener("click", () => selectConversation(item.id));
+          $("conversationList").appendChild(button);
+        });
+      }
+
+      async function selectConversation(id) {
+        state.selectedConversationId = id;
+        document.querySelectorAll(".conversation-item").forEach((item) => item.classList.toggle("active", item.dataset.id === id));
+        const data = await getJson(`/api/conversations/${encodeURIComponent(id)}`);
+        $("selectedTitle").value = data.metadata.title || data.id;
+        $("selectedMetadata").value = JSON.stringify(data.metadata, null, 2);
+        $("selectedMessages").value = JSON.stringify(data.messages, null, 2);
+        renderMessagesPreview();
+      }
+
+      function syntaxHighlightCode(value) {
+        return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+          .replace(/(def|return|if|else|elif|try|except|for|while|import|from|class|function|const|let|var|async|await)/g, '<span class="json-key">$1</span>')
+          .replace(/("[^"]*"|'[^']*')/g, '<span class="json-string">$1</span>');
+      }
+
+      function syntaxHighlightLog(value) {
+        return syntaxHighlightCode(value).replace(/ERROR|failed|Failed/g, '<span class="bad">$&</span>').replace(/WARN|warning|Halted/g, '<span class="json-number">$&</span>').replace(/INFO|complete|Ready/g, '<span class="ok">$&</span>');
+      }
+
+      async function loadSource() {
+        const response = await fetch("/api/developer/source");
+        $("sourceView").innerHTML = syntaxHighlightCode(await response.text());
+      }
+
+      async function loadLogs() {
+        const data = await getJson("/api/logs");
+        $("logSelect").innerHTML = "";
+        data.logs.forEach((log) => {
+          const option = document.createElement("option");
+          option.value = log.date;
+          option.textContent = `${log.date} (${log.size} bytes)`;
+          $("logSelect").appendChild(option);
+        });
+      }
+
+      async function loadSelectedLog() {
+        const date = $("logSelect").value;
+        if (!date) return;
+        const response = await fetch(`/api/logs/${encodeURIComponent(date)}`);
+        $("logView").innerHTML = syntaxHighlightLog(await response.text());
+      }
+
+      document.querySelectorAll(".tab").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
+          document.querySelectorAll(".tab-panel").forEach((panel) => panel.classList.remove("active"));
+          button.classList.add("active");
+          $(button.dataset.tab).classList.add("active");
+        });
+      });
+
+      function clearEnterConfirm(resetStatus = false) {
+        state.pendingEnterConfirm = false;
+        clearTimeout(state.enterConfirmTimer);
+        state.enterConfirmTimer = null;
+        if (!state.isSending) $("sendButton").textContent = "Send";
+        if (resetStatus && !state.isSending) setLiveStatus("Ready. Press Enter to send. Shift+Enter for newline.");
+      }
+
+      async function sendCurrentChatMessage() {
+        if (state.isSending) return;
+        clearEnterConfirm(false);
+        const message = $("prompt").value.trim();
+        if (!state.serverEnabled) { showError("Server connection is stopped. Turn Server On to chat."); return; }
+        if (!message && state.attachments.length === 0) return;
+        state.isSending = true;
+        showError("");
+        setLiveStatus("Request payload prepared. Sending to LM Studio...", "sending");
+        appendDeveloperLog(`Chat request prepared (${estimateTokens(message)} estimated text tokens).`);
+        $("prompt").value = "";
+        const outgoingAttachments = state.attachments.slice();
+        state.attachments = [];
+        renderAttachments();
+        appendMessage("user", message || "[Image attached for analysis]");
+        state.thinkingMessage = appendMessage("assistant", 'Thinking<span class="thinking-dots"></span>', { html: true, transient: true });
+        $("sendButton").disabled = true;
+        $("sendButton").textContent = "Sending";
+        addCrumb("Chat request sent");
+        setMascot(outgoingAttachments.length || estimateTokens(message) > 600 ? "focused" : "thinking");
+
+        try {
+          const data = await getJson("{{ url_for('api_chat') }}", {
+            method: "POST",
+            timeoutMs: 900000,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message,
+              history: state.history,
+              conversation_id: $("conversationId").value.trim(),
+              title: $("conversationTitle").value.trim(),
+              model: selectedModel(),
+              temperature: $("temperature").value,
+              loaded_context: state.loadedContext,
+              mode: $("interactionMode").value,
+              agent_id: selectedAgentName(),
+              execution_policy: $("executionPolicy").value,
+              attachments: outgoingAttachments,
+            }),
+          });
+          $("conversationId").value = data.conversation_id;
+          const assistantText = humanizeAssistantText(data.message && data.message.content ? data.message.content : "");
+          if (state.thinkingMessage) state.thinkingMessage.remove();
+          state.thinkingMessage = null;
+          setLiveStatus("Response received and rendered.", "receiving");
+          appendDeveloperLog("Chat response received from LM Studio.");
+          appendMessage("assistant", assistantText);
+          speakAssistant(assistantText);
+          state.history.push({ role: "user", content: message || "[Image attached for analysis]" });
+          state.history.push({ role: "assistant", content: assistantText });
+          updateTokenMeter(data.usage);
+          if (data.warning) {
+            addCrumb("LM Studio warning preserved", "warn");
+            appendDeveloperLog(`LM Studio warning: ${data.warning}`, "ERROR");
+            if (/cuda|out of memory|gpu memory|model/i.test(data.warning)) showMascotComment("LM Studio could not finish that turn. I saved the request and stayed ready. Check the loaded model and memory pressure, then retry.");
+          } else {
+            addCrumb("Chat response complete", "ok");
+          }
+        } catch (error) {
+          if (state.thinkingMessage) state.thinkingMessage.remove();
+          state.thinkingMessage = null;
+          $("prompt").value = message;
+          showError(error.message);
+          setLiveStatus("Chat request failed. Your text was restored and the prompt is ready.", "error");
+          appendDeveloperLog(`Chat request failed: ${error.message}`);
+          addCrumb("Chat response failed", "bad");
+          setMascot("annoyed");
+          loadLogs().catch((logError) => appendDeveloperLog(`Log refresh failed: ${logError.message}`));
+        } finally {
+          state.isSending = false;
+          $("sendButton").disabled = false;
+          $("sendButton").textContent = "Send";
+          if (!$("error").textContent) {
+            setMascot("idle");
+            setTimeout(() => setLiveStatus("Ready. Press Enter to send. Shift+Enter for newline."), 2200);
+          }
+          clearEnterConfirm(false);
+          loadConversations().catch(() => {});
+        }
+      }
+
+      $("chatForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendCurrentChatMessage();
+      });
+
+      $("quickMenuButton").addEventListener("click", () => $("quickMenu").classList.toggle("active"));
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".quick-nav")) $("quickMenu").classList.remove("active");
+      });
+
+      $("memoryFolderButton").addEventListener("click", () => runAction($("memoryFolderButton"), "Open folder", async () => {
+        const data = await getJson("/api/open-memory-folder", { method: "POST" });
+        $("exportResult").textContent = `Opened memory folder: ${data.path}`;
+      }));
+
+      $("resetAllButton").addEventListener("click", async () => {
+        state.resetCount += 1;
+        sessionStorage.setItem("glikchResetCount", String(state.resetCount));
+        updateCyberClock();
+        addCrumb("Reset all started");
+        try {
+          await fetch("/api/reset-ui", { method: "POST", cache: "no-store" });
+        } catch (error) {
+          // Reset must still work when the API is the broken part.
+        } finally {
+          window.location.href = `/chat?reset=${Date.now()}`;
+        }
+      });
+
+      $("openFolderButton").addEventListener("click", () => {
+        addCrumb("File picker opened");
+        $("memoryFileInput").click();
+      });
+
+      $("selectProjectButton").addEventListener("click", () => {
+        addCrumb("Project picker opened");
+        $("projectFolderInput").click();
+      });
+
+      $("attachImageButton").addEventListener("click", (event) => {
+        const slot = event.target.closest(".image-slot");
+        if (slot && slot.classList.contains("occupied")) {
+          const index = Number(slot.dataset.index);
+          state.attachments.splice(index, 1);
+          renderAttachments();
+          addCrumb("Image removed", "warn");
+          event.preventDefault();
+          return;
+        }
+        addCrumb("Image picker opened");
+        $("imageInput").click();
+      });
+
+      $("imageInput").addEventListener("change", () => runAction($("attachImageButton"), "Attach image", async () => {
+        await addImageFiles($("imageInput").files);
+        $("imageInput").value = "";
+      }));
+
+      $("prompt").addEventListener("paste", async (event) => {
+        const files = [];
+        for (const item of Array.from(event.clipboardData ? event.clipboardData.items : [])) {
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+            if (file && file.type.startsWith("image/")) {
+              files.push(file);
+            }
+          }
+        }
+        if (files.length) {
+          event.preventDefault();
+          await addImageFiles(files);
+        }
+      });
+
+      $("memoryFileInput").addEventListener("change", () => runAction($("openFolderButton"), "Import file", async () => {
+        await uploadFiles($("memoryFileInput").files, "File import");
+        $("memoryFileInput").value = "";
+      }));
+
+      $("projectFolderInput").addEventListener("change", () => runAction($("selectProjectButton"), "Import project", async () => {
+        await uploadFiles($("projectFolderInput").files, "Project import");
+        $("projectFolderInput").value = "";
+      }));
+
+      $("applyImportButton").addEventListener("click", () => runAction($("applyImportButton"), "Load to LLM", async () => {
+        if (!state.latestImportId) throw new Error("Import a file or project folder first.");
+        const data = await getJson(`/api/apply-import/${encodeURIComponent(state.latestImportId)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            conversation_id: $("conversationId").value.trim(),
+            title: $("conversationTitle").value.trim(),
+            model: selectedModel(),
+            mode: $("interactionMode").value,
+            agent_id: selectedAgentName(),
+            execution_policy: $("executionPolicy").value,
+          }),
+        });
+        $("conversationId").value = data.conversation_id;
+        state.loadedContext = data.compact;
+        const assistantText = humanizeAssistantText(data.message && data.message.content ? data.message.content : "");
+        appendMessage("assistant", assistantText);
+        speakAssistant(assistantText);
+        state.history.push({ role: "assistant", content: assistantText });
+        updateTokenMeter(data.usage);
+        $("exportResult").textContent = `Loaded import ${state.latestImportId} into LM Studio context.`;
+      }));
+
+      $("loadLatestCompressedButton").addEventListener("click", () => runAction($("loadLatestCompressedButton"), "Load previous compressed", async () => {
+        const data = await getJson("/api/load-latest-compressed", { method: "POST" });
+        state.latestImportId = data.import.import_id;
+        state.loadedContext = data.compact;
+        state.loadedFileCount += data.import.files.length;
+        rememberContextItems(data.import.files, "latest compressed");
+        updateCyberClock();
+        setImportLog(data.import);
+        $("exportResult").textContent = `Loaded latest compressed file:\n${data.import.files[0].filename}\nReady to load to LLM server or use in the next chat.`;
+      }));
+
+      $("compressResetButton").addEventListener("click", () => runAction($("compressResetButton"), "Compress reset", async () => {
+        const id = $("conversationId").value.trim();
+        if (!id) return;
+        $("bundleProgress").style.display = "block";
+        $("bundleProgressBar").style.width = "15%";
+        const data = await getJson(`/api/compress-reset/${encodeURIComponent(id)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: $("bundlePassword").value }),
+        });
+        $("bundleProgressBar").style.width = "75%";
+        downloadBundle(data);
+        state.history = [];
+        $("messages").innerHTML = "";
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.id = "emptyState";
+        empty.textContent = "Session context reset. Start the next chat from the compact LLM memory export.";
+        $("messages").appendChild(empty);
+        $("bundleProgressBar").style.width = "100%";
+        $("exportResult").textContent = `Bundle complete:\n${data.bundle_dir}\nHuman: ${data.human_file}\nLLM: ${data.compact_file}\nReport: session_report.html\nBrowser chat context reset.`;
+        setTimeout(() => {
+          $("bundleProgress").style.display = "none";
+          $("bundleProgressBar").style.width = "0";
+        }, 1200);
+      }));
+
+      $("saveConversationButton").addEventListener("click", () => runAction($("saveConversationButton"), "Save memory", async () => {
+        if (!state.selectedConversationId) return;
+        const metadata = JSON.parse($("selectedMetadata").value || "{}");
+        metadata.title = $("selectedTitle").value.trim() || metadata.title;
+        const messages = JSON.parse($("selectedMessages").value || "[]");
+        await getJson(`/api/conversations/${encodeURIComponent(state.selectedConversationId)}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ metadata, messages }),
+        });
+        await loadConversations();
+      }));
+
+      $("newConversationButton").addEventListener("click", () => runAction($("newConversationButton"), "Create memory", async () => {
+        const data = await getJson("/api/conversations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: "New Memory", messages: [] }),
+        });
+        await loadConversations();
+        await selectConversation(data.id);
+      }));
+
+      $("deleteConversationButton").addEventListener("click", () => runAction($("deleteConversationButton"), "Delete memory", async () => {
+        if (!state.selectedConversationId || !confirm("Delete selected memory file?")) return;
+        await getJson(`/api/conversations/${encodeURIComponent(state.selectedConversationId)}`, { method: "DELETE" });
+        state.selectedConversationId = "";
+        $("selectedTitle").value = "";
+        $("selectedMetadata").value = "";
+        $("selectedMessages").value = "";
+        await loadConversations();
+      }));
+
+      $("exportTxtButton").addEventListener("click", () => runAction($("exportTxtButton"), "Export TXT", () => downloadWithStatus("txt")));
+      $("exportJsonButton").addEventListener("click", () => runAction($("exportJsonButton"), "Export JSON", () => downloadWithStatus("json")));
+      $("exportCsvButton").addEventListener("click", () => runAction($("exportCsvButton"), "Export CSV", () => downloadWithStatus("csv")));
+      $("exportNotebookButton").addEventListener("click", () => runAction($("exportNotebookButton"), "Export IPYNB", () => downloadWithStatus("ipynb")));
+      $("refreshStatusButton").addEventListener("click", () => runAction($("refreshStatusButton"), "Refresh status", loadStatus));
+      $("refreshAdminButton").addEventListener("click", () => runAction($("refreshAdminButton"), "Refresh memory", () => Promise.all([loadConversations(), loadLogs()])));
+      $("loadLogButton").addEventListener("click", () => runAction($("loadLogButton"), "Open log", loadSelectedLog));
+      $("exportLogButton").addEventListener("click", () => { const date = $("logSelect").value; if (date) window.location.href = `/api/logs/${encodeURIComponent(date)}/export`; });
+      $("importLogButton").addEventListener("click", () => $("logFileInput").click());
+      $("logFileInput").addEventListener("change", () => runAction($("importLogButton"), "Import log", async () => {
+        const formData = new FormData();
+        Array.from($("logFileInput").files || []).forEach((file) => formData.append("files", file, file.name));
+        await getJson("/api/logs/import", { method: "POST", body: formData });
+        $("logFileInput").value = "";
+        await loadLogs();
+      }));
+      $("serverToggle").addEventListener("change", () => {
+        state.serverEnabled = $("serverToggle").checked;
+        updateReadyState(state.serverEnabled ? "ready" : "bad");
+        addCrumb(state.serverEnabled ? "Server connection enabled" : "Server connection stopped", state.serverEnabled ? "ok" : "bad");
+      });
+
+      function openAgentModal(blank = false) {
+        const template = state.agentTemplates.find((item) => item.name === $("agentTemplate").value) || {};
+        $("agentModalName").value = blank ? "" : (template.name || selectedAgentName());
+        $("agentModalType").value = blank ? $("interactionMode").value : (template.mode || $("interactionMode").value);
+        $("agentModalPolicy").value = blank ? $("executionPolicy").value : (template.execution_policy || $("executionPolicy").value);
+        $("agentModalCreator").value = blank ? "" : (template.creator || "");
+        $("agentModalEmail").value = blank ? "" : (template.email || "");
+        $("agentModalInstruction").value = blank ? "" : (template.instruction || "");
+        $("agentModal").classList.add("active");
+      }
+
+      function agentModalPayload() {
+        return {
+          name: $("agentModalName").value.trim() || "Unnamed Agent",
+          mode: $("agentModalType").value,
+          execution_policy: $("agentModalPolicy").value,
+          creator: $("agentModalCreator").value.trim(),
+          email: $("agentModalEmail").value.trim(),
+          instruction: $("agentModalInstruction").value.trim(),
+        };
+      }
+
+      async function saveAgentPayload(payload) {
+        await getJson("/api/agent-templates", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        await loadAgentTemplates();
+        $("agentTemplate").value = payload.name;
+        $("agentNameInput").value = payload.name;
+        $("interactionMode").value = payload.mode;
+        $("executionPolicy").value = payload.execution_policy;
+      }
+
+      function downloadAgentPayload(payload) {
+        const exportPayload = { schema: "glikch.agent.template.v1", created: new Date().toISOString(), template: payload };
+        const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `agent-${payload.name.replace(/[^a-z0-9_-]+/gi, "-")}.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      $("selectedMessages").addEventListener("input", renderMessagesPreview);
+      $("agentTemplate").addEventListener("change", syncAgentEditor);
+      $("saveAgentButton").addEventListener("click", () => openAgentModal(false));
+      $("addAgentButton").addEventListener("click", () => {
+        if (state.agentTemplates.length && !confirm("Agent presets are already loaded. Save/export the current agent and process bundle before adding a new preset? Press OK to continue.")) return;
+        openAgentModal(true);
+        addCrumb("Agent preset form opened");
+      });
+      $("removeAgentButton").addEventListener("click", () => runAction($("removeAgentButton"), "Remove agent", async () => {
+        const name = $("agentTemplate").value || selectedAgentName();
+        if (name === "Unnamed Agent" || !confirm(`Remove ${name}?`)) return;
+        await getJson("/api/agent-templates", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+        await loadAgentTemplates();
+        syncAgentEditor();
+      }));
+
+      $("closeAgentModalButton").addEventListener("click", () => $("agentModal").classList.remove("active"));
+      $("saveAgentModalButton").addEventListener("click", () => runAction($("saveAgentModalButton"), "Save agent", async () => {
+        const payload = agentModalPayload();
+        await saveAgentPayload(payload);
+        $("agentModal").classList.remove("active");
+      }));
+      $("exportAgentButton").addEventListener("click", () => downloadAgentPayload(agentModalPayload()));
+      $("emailAgentButton").addEventListener("click", () => {
+        const payload = agentModalPayload();
+        downloadAgentPayload(payload);
+        const subject = encodeURIComponent(`GLIKCH agent preset: ${payload.name}`);
+        const body = encodeURIComponent("Agent preset file downloaded. Attach the JSON file to this email before sending.\n\n" + JSON.stringify(payload, null, 2));
+        window.location.href = `mailto:${encodeURIComponent(payload.email || "")}?subject=${subject}&body=${body}`;
+      });
+      $("importAgentButton").addEventListener("click", () => $("agentImportInput").click());
+      $("agentImportInput").addEventListener("change", () => runAction($("importAgentButton"), "Import agent", async () => {
+        const formData = new FormData();
+        Array.from($("agentImportInput").files || []).forEach((file) => formData.append("files", file, file.name));
+        const data = await getJson("/api/agent-templates/import", { method: "POST", body: formData });
+        await loadAgentTemplates();
+        $("agentImportInput").value = "";
+        addCrumb(`Imported ${data.imported.length} agent preset(s)`, "ok");
+      }));
+      $("prompt").addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" || event.shiftKey) return;
+        event.preventDefault();
+        const hasPayload = $("prompt").value.trim() || state.attachments.length;
+        if (!hasPayload || state.isSending) return;
+        sendCurrentChatMessage();
+      });
+
+
+      async function loadExtensions() {
+        const data = await getJson("/api/extensions");
+        state.extensions = data.extensions || [];
+        renderExtensions();
+      }
+
+      function renderExtensions() {
+        const list = $("extensionsList");
+        list.innerHTML = "";
+        if (!state.extensions.length) {
+          const empty = document.createElement("div");
+          empty.className = "hint";
+          empty.textContent = "No extension requests yet. Use + to define one.";
+          list.appendChild(empty);
+          return;
+        }
+        state.extensions.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "extension-card";
+          card.dataset.id = item.id;
+          card.innerHTML = `<strong>${item.name || "Unnamed Extension"}</strong><div class="hint">Developer: ${item.developer || "Unknown"} | Business: ${item.business || "Optional"} | Status: ${item.status || "draft"}</div><p>${item.purpose || "No purpose documented."}</p><div class="row"><button type="button" data-ext-edit="${item.id}">Edit</button><button type="button" data-ext-select="${item.id}">Select</button></div>`;
+          list.appendChild(card);
+        });
+      }
+
+      function openExtensionModal(extension = null) {
+        $("extensionId").value = extension ? extension.id : "";
+        $("extensionName").value = extension ? extension.name || "" : "";
+        $("extensionDeveloper").value = extension ? extension.developer || "" : "";
+        $("extensionBusiness").value = extension ? extension.business || "" : "";
+        $("extensionPurpose").value = extension ? extension.purpose || "" : "";
+        $("extensionModal").classList.add("active");
+      }
+
+      async function saveExtension(status = "draft") {
+        const payload = {
+          id: $("extensionId").value,
+          name: $("extensionName").value.trim(),
+          developer: $("extensionDeveloper").value.trim(),
+          business: $("extensionBusiness").value.trim(),
+          purpose: $("extensionPurpose").value.trim(),
+          status,
+        };
+        const data = await getJson("/api/extensions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        state.extensions = data.extensions || [];
+        renderExtensions();
+        $("extensionModal").classList.remove("active");
+      }
+
+      function taskDateKey(date) {
+        return date.toISOString().slice(0, 10);
+      }
+
+      function sortedTasks(tasks) {
+        const sort = $("taskSort") ? $("taskSort").value : "date";
+        return tasks.slice().sort((a, b) => {
+          if (sort === "title") return String(a.title || "").localeCompare(String(b.title || ""));
+          if (sort === "urgency") return ["Critical", "High", "Normal", "Low"].indexOf(a.urgency || "Normal") - ["Critical", "High", "Normal", "Low"].indexOf(b.urgency || "Normal");
+          if (sort === "completion") return String(a.status || "Open").localeCompare(String(b.status || "Open"));
+          if (sort === "ignored") return (a.status === "Ignored" ? 0 : 1) - (b.status === "Ignored" ? 0 : 1);
+          if (sort === "time") return String(a.time || "99:99").localeCompare(String(b.time || "99:99"));
+          return String(a.date || "").localeCompare(String(b.date || ""));
+        });
+      }
+
+      function renderCalendar() {
+        const grid = $("calendarGrid");
+        grid.innerHTML = "";
+        const year = state.calendarDate.getFullYear();
+        const month = state.calendarDate.getMonth();
+        $("calendarTitle").textContent = state.calendarDate.toLocaleString(undefined, { month: "long", year: "numeric" });
+        const first = new Date(year, month, 1);
+        const days = new Date(year, month + 1, 0).getDate();
+        for (let blank = 0; blank < first.getDay(); blank += 1) grid.appendChild(document.createElement("div"));
+        for (let day = 1; day <= days; day += 1) {
+          const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          const button = document.createElement("button");
+          button.className = "calendar-day";
+          const tasks = state.tasks.filter((task) => task.date === date);
+          button.innerHTML = `<strong>${day}</strong>${tasks.slice(0, 3).map((task) => `<div class="hint">${task.time || "All day"} ${task.title || "Untitled"}</div>`).join("")}${tasks.length > 3 ? `<div class="hint">+${tasks.length - 3} more</div>` : ""}`;
+          button.addEventListener("click", () => openDayEvents(date));
+          grid.appendChild(button);
+        }
+        renderTaskTable();
+      }
+
+      function renderTaskTable() {
+        const tbody = $("taskTable").querySelector("tbody");
+        tbody.innerHTML = "";
+        sortedTasks(state.tasks).forEach((task) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${task.status === "Complete" ? "Yes" : "No"}</td><td>${task.date || ""}</td><td>${task.all_day ? "All day" : (task.time || "")}</td><td>${task.title || "Untitled"}</td><td>${task.urgency || "Normal"}</td><td>${task.status || "Open"}</td><td><button type="button" data-edit="${task.id}">Edit</button> <button type="button" data-delete="${task.id}">Delete</button></td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderDayEvents() {
+        const tbody = $("dayEventsTable").querySelector("tbody");
+        tbody.innerHTML = "";
+        const tasks = sortedTasks(state.tasks.filter((task) => task.date === state.selectedTaskDate));
+        if (!tasks.length) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = '<td colspan="5" class="hint">No events scheduled for this day.</td>';
+          tbody.appendChild(tr);
+          return;
+        }
+        tasks.forEach((task) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${task.all_day ? "All day" : (task.time || "")}</td><td>${task.title || "Untitled"}</td><td>${task.urgency || "Normal"}</td><td>${task.status || "Open"}</td><td><button type="button" data-edit="${task.id}">Edit</button> <button type="button" data-delete="${task.id}">Delete</button></td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function openDayEvents(date) {
+        state.selectedTaskDate = date;
+        $("dayEventsTitle").textContent = `Events for ${date}`;
+        renderDayEvents();
+        $("dayEventsModal").classList.add("active");
+      }
+
+      function openTaskModal(date, task = null) {
+        $("taskModalTitle").textContent = task ? "Edit Task" : "New Task";
+        $("taskEditId").value = task ? task.id : "";
+        $("taskTitle").value = task ? (task.title || "") : "";
+        $("taskSubtext").value = task ? (task.subtext || "") : "";
+        $("taskDate").value = task ? task.date : date;
+        $("taskTime").value = task ? (task.time || "") : "";
+        $("taskLocation").value = task ? (task.location || "") : "";
+        $("taskUrgency").value = task ? (task.urgency || "Normal") : "Normal";
+        $("taskStatus").value = task ? (task.status || "Open") : "Open";
+        $("taskAllDay").checked = task ? !!task.all_day : false;
+        $("taskModal").classList.add("active");
+      }
+
+      async function loadTasks() {
+        const data = await getJson("/api/tasks");
+        state.tasks = (data.tasks || []).map((task, index) => ({ id: task.id || `task-${Date.now()}-${index}`, urgency: task.urgency || "Normal", status: task.status || "Open", ...task }));
+        renderCalendar();
+      }
+
+      async function saveTasks() {
+        await getJson("/api/tasks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tasks: state.tasks }) });
+      }
+
+      function deleteTask(id) {
+        state.tasks = state.tasks.filter((task) => task.id !== id);
+        renderCalendar();
+        renderDayEvents();
+        updateCyberClock();
+      }
+
+      function editTask(id) {
+        const task = state.tasks.find((item) => item.id === id);
+        if (task) openTaskModal(task.date, task);
+      }
+
+      $("prevMonthButton").addEventListener("click", () => { state.calendarDate.setMonth(state.calendarDate.getMonth() - 1); renderCalendar(); });
+      $("nextMonthButton").addEventListener("click", () => { state.calendarDate.setMonth(state.calendarDate.getMonth() + 1); renderCalendar(); });
+      $("todayButton").addEventListener("click", () => { state.calendarDate = new Date(); renderCalendar(); });
+      $("saveTasksButton").addEventListener("click", () => runAction($("saveTasksButton"), "Save tasks", saveTasks));
+      $("closeTaskButton").addEventListener("click", () => $("taskModal").classList.remove("active"));
+      $("discardTaskButton").addEventListener("click", () => $("taskModal").classList.remove("active"));
+      $("closeDayEventsButton").addEventListener("click", () => $("dayEventsModal").classList.remove("active"));
+      $("newTaskForDayButton").addEventListener("click", () => openTaskModal(state.selectedTaskDate));
+      $("taskSort").addEventListener("change", () => { renderDayEvents(); renderTaskTable(); });
+      $("taskDate").addEventListener("change", () => { $("taskAllDay").checked = false; });
+      ["dayEventsTable", "taskTable"].forEach((id) => $(id).addEventListener("click", (event) => {
+        const edit = event.target.closest("[data-edit]");
+        const del = event.target.closest("[data-delete]");
+        if (edit) editTask(edit.dataset.edit);
+        if (del && confirm("Delete this task?")) deleteTask(del.dataset.delete);
+      }));
+      $("saveTaskButton").addEventListener("click", () => {
+        const files = Array.from($("taskFiles").files || []).map((file) => file.name);
+        const id = $("taskEditId").value || `task-${Date.now()}`;
+        const existing = state.tasks.find((task) => task.id === id) || {};
+        const next = { ...existing, id, title: $("taskTitle").value.trim(), subtext: $("taskSubtext").value.trim(), date: $("taskDate").value, time: $("taskTime").value, location: $("taskLocation").value.trim(), urgency: $("taskUrgency").value, status: $("taskStatus").value, all_day: $("taskAllDay").checked, files: files.length ? files : (existing.files || []) };
+        state.tasks = state.tasks.filter((task) => task.id !== id);
+        state.tasks.push(next);
+        state.selectedTaskDate = next.date;
+        $("taskModal").classList.remove("active");
+        renderCalendar();
+        renderDayEvents();
+        updateCyberClock();
+      });
+
+      $("addExtensionButton").addEventListener("click", () => openExtensionModal());
+      $("removeExtensionButton").addEventListener("click", () => runAction($("removeExtensionButton"), "Remove extension", async () => {
+        if (!state.selectedExtensionId) throw new Error("Select an extension first.");
+        const data = await getJson("/api/extensions", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: state.selectedExtensionId }) });
+        state.extensions = data.extensions || [];
+        state.selectedExtensionId = "";
+        renderExtensions();
+      }));
+      $("sendAuthProcessButton").addEventListener("click", () => {
+        const extension = state.extensions.find((item) => item.id === state.selectedExtensionId);
+        if (extension) openExtensionModal(extension);
+        else openExtensionModal();
+      });
+      $("extensionsList").addEventListener("click", (event) => {
+        const edit = event.target.closest("[data-ext-edit]");
+        const select = event.target.closest("[data-ext-select]");
+        const id = edit ? edit.dataset.extEdit : select ? select.dataset.extSelect : "";
+        if (!id) return;
+        state.selectedExtensionId = id;
+        document.querySelectorAll(".extension-card").forEach((card) => card.classList.toggle("active", card.dataset.id === id));
+        if (edit) openExtensionModal(state.extensions.find((item) => item.id === id));
+      });
+      $("saveExtensionButton").addEventListener("click", () => runAction($("saveExtensionButton"), "Save extension", () => saveExtension("draft")));
+      $("authExtensionButton").addEventListener("click", () => runAction($("authExtensionButton"), "Send auth process", () => saveExtension("auth-requested")));
+      $("closeExtensionButton").addEventListener("click", () => $("extensionModal").classList.remove("active"));
+
+      $("tokenWidget").addEventListener("click", openTokenModal);
+      $("closeTokenModalButton").addEventListener("click", () => $("tokenModal").classList.remove("active"));
+      $("saveTokenSettingsButton").addEventListener("click", () => runAction($("saveTokenSettingsButton"), "Save token ratio", async () => {
+        const windowValue = Number($("tokenWindowInput").value || state.tokenWindow);
+        if (windowValue >= 1024) state.tokenWindow = windowValue;
+        state.uiSettings = { ...state.uiSettings, token_window: state.tokenWindow };
+        localStorage.setItem("glikchTokenWindow", String(state.tokenWindow));
+        const manual = Number($("manualUsedTokens").value || 0);
+        if (manual > 0) updateTokenMeter({ prompt_tokens: manual, completion_tokens: 0, total_tokens: manual });
+        else updateTokenMeter(state.lastUsage);
+        const data = await getJson("/api/ui-settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(collectUiSettings()) });
+        state.uiSettings = data.settings || state.uiSettings;
+        hydrateSettingsForm();
+        $("tokenModal").classList.remove("active");
+        addCrumb("Token ratio calibrated", "ok");
+      }));
+      $("refreshTokenConnectionButton").addEventListener("click", () => runAction($("refreshTokenConnectionButton"), "Reset token connection", async () => {
+        localStorage.removeItem("glikchTokenWindow");
+        await loadStatus();
+        updateTokenMeter(state.lastUsage);
+      }));
+      $("mascotBox").addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); showMascotComment(); });
+      $("mascotComment").addEventListener("mouseenter", () => clearTimeout(showMascotComment.timer));
+      $("mascotComment").addEventListener("mouseleave", () => {
+        clearTimeout(showMascotComment.timer);
+        const delay = showMascotComment.locked ? 3000 : 6000;
+        showMascotComment.timer = setTimeout(() => $("mascotComment").classList.remove("active"), delay);
+      });
+      $("micButton").addEventListener("click", startVoiceInput);
+      $("openEmotionModalButton").addEventListener("click", () => {
+        $("emotionPresetText").value = (state.emotionPresets.length ? state.emotionPresets : defaultMascotComments).join("\n");
+        $("emotionModal").classList.add("active");
+      });
+      $("closeEmotionModalButton").addEventListener("click", () => $("emotionModal").classList.remove("active"));
+      $("testVoiceButton").addEventListener("click", () => speakAssistant("NEXUZ companion voice online. I am here with you, steady and ready."));
+      $("saveEmotionTextButton").addEventListener("click", () => runAction($("saveEmotionTextButton"), "Save mascot messages", async () => {
+        const text = $("emotionPresetText").value || "";
+        const file = new File([text], "emotion-presets.txt", { type: "text/plain" });
+        const formData = new FormData();
+        formData.append("files", file, file.name);
+        const data = await getJson("/api/emotion-presets", { method: "POST", body: formData });
+        state.emotionPresets = data.presets || defaultMascotComments;
+        $("emotionPresetText").value = state.emotionPresets.join("\n");
+        showMascotComment("Mascot messages saved.");
+        $("emotionModal").classList.remove("active");
+      }));
+      $("loadEmotionPresetsButton").addEventListener("click", () => $("emotionPresetInput").click());
+      $("emotionPresetInput").addEventListener("change", () => runAction($("loadEmotionPresetsButton"), "Load emotions", async () => {
+        const formData = new FormData();
+        Array.from($("emotionPresetInput").files || []).forEach((file) => formData.append("files", file, file.name));
+        const data = await getJson("/api/emotion-presets", { method: "POST", body: formData });
+        state.emotionPresets = data.presets || defaultMascotComments;
+        $("emotionPresetInput").value = "";
+        showMascotComment("Emotion presets loaded.");
+      }));
+      ["click", "keydown", "input", "mousemove", "touchstart"].forEach((eventName) => document.addEventListener(eventName, resetInactivityTimer, { passive: true }));
+      setInterval(updateCyberClock, 1000);
+      resetInactivityTimer();
+      updateCyberClock();
+
+      function populateVoices() {
+        if (!("speechSynthesis" in window)) return;
+        state.voices = window.speechSynthesis.getVoices();
+        const select = $("voiceSelect");
+        const current = state.uiSettings.voice_name || "";
+        select.innerHTML = '<option value="">Browser default voice</option>';
+        state.voices.forEach((voice) => {
+          const option = document.createElement("option");
+          option.value = voice.name;
+          option.textContent = `${voice.name} (${voice.lang})`;
+          select.appendChild(option);
+        });
+        select.value = current;
+      }
+
+      function speakAssistant(text) {
+        if (!state.uiSettings.voice_enabled || !("speechSynthesis" in window)) return;
+        const clean = String(text || "").replace(/```[\s\S]*?```/g, "code block omitted").slice(0, 900);
+        if (!clean.trim()) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(clean);
+        const selected = state.voices.find((voice) => voice.name === state.uiSettings.voice_name);
+        if (selected) utterance.voice = selected;
+        utterance.rate = 0.92;
+        utterance.pitch = 1.12;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function startVoiceInput() {
+        const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!Recognition) {
+          const message = "Voice input is not available in this browser. Chrome or Edge usually support it best.";
+          showError(message);
+          setLiveStatus(message, "error");
+          appendDeveloperLog(message);
+          return;
+        }
+        const recognition = new Recognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        $("micButton").classList.add("listening");
+        setLiveStatus("Listening for voice input...", "sending");
+        recognition.onresult = (event) => {
+          const transcript = event.results && event.results[0] && event.results[0][0] ? event.results[0][0].transcript.trim() : "";
+          if (!transcript) {
+            setLiveStatus("No voice text detected. Ready for typed input.", "error");
+            return;
+          }
+          $("prompt").value = transcript;
+          addCrumb("Voice captured", "ok");
+          setLiveStatus("Voice captured. Sending to LM Studio...", "sending");
+          setTimeout(() => { if ($("prompt").value.trim() && !state.isSending) sendCurrentChatMessage(); }, 350);
+        };
+        recognition.onerror = (event) => {
+          const message = `Voice input failed: ${event.error || "unknown browser error"}`;
+          showError(message);
+          setLiveStatus(message, "error");
+          appendDeveloperLog(message);
+        };
+        recognition.onend = () => $("micButton").classList.remove("listening");
+        try {
+          recognition.start();
+        } catch (error) {
+          $("micButton").classList.remove("listening");
+          showError(`Voice input could not start: ${error.message}`);
+          setLiveStatus("Voice input could not start. Ready for typed input.", "error");
+        }
+      }
+
+      function initNexuzSplash() {
+        const splash = $("nexuzSplash");
+        if (!splash || localStorage.getItem("glikchNexuzSplashHidden") === "1" || sessionStorage.getItem("glikchNexuzSplashSeen") === "1") return;
+        const particles = $("nexuzParticles");
+        if (particles && !particles.children.length) {
+          const bits = ["0101", "NEXUZ", "SYS", "AI", "MEM", "root", "0xAF", "LLM", "RAG", "SEC"];
+          for (let index = 0; index < 30; index += 1) {
+            const span = document.createElement("span");
+            span.textContent = bits[index % bits.length];
+            span.style.left = `${Math.random() * 96}%`;
+            span.style.top = `${20 + Math.random() * 78}%`;
+            span.style.animationDelay = `${Math.random() * 4}s`;
+            span.style.animationDuration = `${3.5 + Math.random() * 3}s`;
+            particles.appendChild(span);
+          }
+        }
+        splash.classList.add("active");
+        const bootLines = ["System Initializing...", "Memory Core: Online", "Agents: Standby", "Security: Encrypted", "Ready." ];
+        let index = 0;
+        const terminalTimer = setInterval(() => {
+          $("nexuzTerminal").textContent = bootLines[index] || bootLines[bootLines.length - 1];
+          index += 1;
+          if (index >= bootLines.length) clearInterval(terminalTimer);
+        }, 520);
+        const closeSplash = () => {
+          if ($("dontShowNexuzSplash").checked) localStorage.setItem("glikchNexuzSplashHidden", "1");
+          sessionStorage.setItem("glikchNexuzSplashSeen", "1");
+          splash.classList.add("closing");
+          setTimeout(() => splash.classList.remove("active", "closing"), 720);
+        };
+        $("enterNexuzButton").addEventListener("click", closeSplash, { once: true });
+        document.addEventListener("keydown", (event) => { if (event.key === "Escape" && splash.classList.contains("active")) closeSplash(); }, { once: true });
+      }
+
+      $("model").addEventListener("change", () => {
+        state.uiSettings.default_model = selectedModel();
+        localStorage.setItem("glikchDefaultModel", selectedModel());
+        addCrumb(`Default model saved: ${selectedModel() || "LM Studio loaded model"}`, "ok");
+        getJson("/api/ui-settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(collectUiSettings()) })
+          .then((data) => { state.uiSettings = data.settings || state.uiSettings; })
+          .catch((error) => appendDeveloperLog(`Default model save failed: ${error.message}`, "ERROR"));
+      });
+
+      $("themePreset").addEventListener("change", () => {
+        const preset = themePresets[$("themePreset").value];
+        if (preset) preset.forEach((color, index) => { $(`accentColor${index}`).value = color; });
+        applyUiSettings(collectUiSettings());
+      });
+      Array.from({ length: 6 }, (_, index) => $(`accentColor${index}`)).forEach((input) => input.addEventListener("input", () => {
+        $("themePreset").value = "custom";
+        applyUiSettings(collectUiSettings());
+      }));
+      ["borderStrength", "glowStrength", "chromeAlpha", "exteriorBorderColor", "loginWallpaperUrl", "appWallpaperUrl", "logoUrl", "logoScale", "logoOffsetX", "logoOffsetY", "mascotScale", "matrixCharset", "matrixColorTop", "matrixColorMid", "matrixColorTail", "matrixTextColor", "matrixGlowColor", "matrixGlowStrength", "matrixTextSize", "matrixDistance", "matrixDensity", "matrixSpeed"].forEach((id) => $(id).addEventListener("input", () => applyUiSettings(collectUiSettings())));
+      ["neonEnabled", "mascotEnabled", "voiceEnabled", "voiceSelect", "matrixEnabled", "matrixEmojiEnabled"].forEach((id) => $(id).addEventListener("change", () => applyUiSettings(collectUiSettings())));
+      $("applyThemeButton").addEventListener("click", () => applyUiSettings(collectUiSettings()));
+      $("saveUiSettingsButton").addEventListener("click", () => runAction($("saveUiSettingsButton"), "Save UI settings", async () => {
+        const data = await getJson("/api/ui-settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(collectUiSettings()) });
+        state.uiSettings = data.settings || state.uiSettings;
+        hydrateSettingsForm();
+        $("settingsStatus").textContent = "Settings saved. Login page changes apply on next login load.";
+      }));
+      $("loginWallpaperFile").addEventListener("change", () => runAction($("saveUiSettingsButton"), "Upload login wallpaper", async () => {
+        await uploadWallpaper("login", $("loginWallpaperFile").files[0]);
+        $("loginWallpaperFile").value = "";
+      }));
+      $("appWallpaperFile").addEventListener("change", () => runAction($("saveUiSettingsButton"), "Upload app wallpaper", async () => {
+        await uploadWallpaper("app", $("appWallpaperFile").files[0]);
+        $("appWallpaperFile").value = "";
+      }));
+      $("logoFile").addEventListener("change", () => runAction($("saveUiSettingsButton"), "Upload logo", async () => {
+        await uploadWallpaper("logo", $("logoFile").files[0]);
+        $("logoFile").value = "";
+      }));
+      hydrateSettingsForm();
+      renderDebugTicker();
+      setTimeout(() => showMascotComment(), 900);
+      populateVoices();
+      if ("speechSynthesis" in window) window.speechSynthesis.onvoiceschanged = populateVoices;
+
+      initNexuzSplash();
+      updateTokenMeter();
+      renderImageTray();
+      updateCompressionEstimate();
+      Promise.all([loadModels(), loadStatus(), loadConversations(), loadSource(), loadLogs(), loadAgentTemplates(), loadTasks(), loadExtensions(), getJson("/api/emotion-presets").then((data) => { state.emotionPresets = data.presets || defaultMascotComments; if ($("emotionPresetText")) $("emotionPresetText").value = state.emotionPresets.join("\n"); })]).catch((error) => showError(error.message));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "import_id": "import-20260703-044444",
+  "created": "2026-07-03T04:44:44+00:00",
+  "files": [
+    {
+      "filename": "20260703-042237-288009-002.jpg",
+      "extension": ".jpg",
+      "detected_format": "image",
+      "status": "detected",
+      "messages": [],
+      "compact_memory": null,
+      "text_preview": "Image file imported: 20260703-042237-288009-002.jpg. Stored at docs/images/imports/20260703-044444-145683-20260703-042237-288009-002.jpg.",
+      "image_ref": "docs/images/imports/20260703-044444-145683-20260703-042237-288009-002.jpg",
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-044444\\20260703-042237-288009-002.jpg"
+    }
+  ]
+}

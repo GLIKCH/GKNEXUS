@@ -1,0 +1,11 @@
+services:
+  glikch-site:
+    build: .
+    container_name: glikch-tech-site
+    env_file:
+      - .env
+    ports:
+      - "4177:4177"
+    volumes:
+      - ./server/data:/app/server/data
+    restart: unless-stopped

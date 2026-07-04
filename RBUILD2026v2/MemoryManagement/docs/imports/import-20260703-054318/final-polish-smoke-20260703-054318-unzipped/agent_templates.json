@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Verifier Agent",
+    "mode": "Developer",
+    "instruction": "test"
+  },
+  {
+    "name": "Unnamed Agent",
+    "mode": "Chat",
+    "instruction": "Execution policy: auto"
+  },
+  {
+    "name": "Smoke Agent",
+    "mode": "Developer",
+    "instruction": "test"
+  }
+]

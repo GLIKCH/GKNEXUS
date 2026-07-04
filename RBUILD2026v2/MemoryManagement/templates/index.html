@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GLIKCH NEXUZ Conversations</title>
+    <style>
+      :root { color-scheme: dark; --bg: #070707; --panel: #11090a; --ink: #f4eaea; --muted: #b68f8f; --line: #3a1717; --accent: #d51f2a; --ok: #44d17a; }
+      * { box-sizing: border-box; }
+      body { font-family: Arial, sans-serif; min-height: 100vh; max-width: 1180px; margin: 0 auto; padding: 4rem 1.25rem 1.25rem; background: radial-gradient(circle at top left, #2a0709 0, var(--bg) 34rem); color: var(--ink); display: flex; flex-direction: column; align-items: center; }
+      main { width: 100%; }
+      h1 { margin: 0 0 1rem; font-size: 1.2rem; }
+      .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1rem; }
+      .toolbar form { flex: 1; display: flex; gap: 0.5rem; align-items: center; }
+      .toolbar input[type="search"], .toolbar input[type="text"] { padding: 0.65rem; width: 100%; border: 1px solid var(--line); border-radius: 6px; background: #080808; color: var(--ink); }
+      .toolbar label { display: flex; align-items: center; gap: 0.25rem; font-size: 0.95rem; color: var(--muted); white-space: nowrap; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+      .pager { display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; }
+      th, td { border: 1px solid var(--line); padding: 0.75rem; vertical-align: top; }
+      th { background: #1a0b0d; color: #ff9aa1; text-align: left; }
+      tbody tr { background: rgba(12, 12, 12, 0.82); }
+      a { color: #ff838b; font-weight: 800; text-decoration: none; }
+      a.button, button.button { display: inline-block; padding: 0.65rem 1rem; background: var(--accent); color: white; text-decoration: none; border: 1px solid var(--accent); border-radius: 6px; cursor: pointer; font-weight: 800; white-space: nowrap; }
+      form.inline { display: inline; }
+      .expired { color: #ff6b6b; font-weight: bold; }
+      .active { color: var(--ok); font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <main>
+    <h1>GLIKCH NEXUZ Conversations</h1>
+    <div class="toolbar">
+      <a class="button" href="{{ url_for('chat') }}">Open Chat UI</a>
+      <a class="button" href="{{ url_for('create_conversation') }}">New Conversation</a>
+      <form method="get" action="{{ url_for('index') }}">
+        <input type="search" name="q" placeholder="Search conversations..." value="{{ q or '' }}" />
+        <label><input type="checkbox" name="expired" value="1" {% if show_expired %}checked{% endif %}> Show expired</label>
+        <button class="button" type="submit">Search</button>
+      </form>
+      <form method="post" action="{{ url_for('prune_route') }}" class="inline">
+        <button class="button" type="submit">Remove Expired</button>
+      </form>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Expires</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for conversation in conversations %}
+        <tr>
+          <td>{{ conversation.id }}</td>
+          <td>{{ conversation.metadata.title or '' }}</td>
+          <td>{{ conversation.metadata.created or '' }}</td>
+          <td>{{ conversation.metadata.expires_at or '' }}</td>
+          <td>{% if conversation.expired %}<span class="expired">Expired</span>{% else %}<span class="active">Active</span>{% endif %}</td>
+          <td>
+            <a href="{{ url_for('conversation', conv_id=conversation.id) }}">View / Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No conversations found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="pager"><button class="button" id="prevPage" type="button">Back</button><button class="button" id="nextPage" type="button">Next</button></div>
+    </main>
+    <script>
+      let page = 0;
+      const size = 25;
+      function renderPage() {
+        const rows = Array.from(document.querySelectorAll("tbody tr"));
+        rows.forEach((row, index) => row.style.display = index >= page * size && index < (page + 1) * size ? "" : "none");
+      }
+      document.getElementById("prevPage").addEventListener("click", () => { page = Math.max(0, page - 1); renderPage(); });
+      document.getElementById("nextPage").addEventListener("click", () => { const rows = document.querySelectorAll("tbody tr").length; if ((page + 1) * size < rows) page += 1; renderPage(); });
+      renderPage();
+    </script>
+  </body>
+</html>

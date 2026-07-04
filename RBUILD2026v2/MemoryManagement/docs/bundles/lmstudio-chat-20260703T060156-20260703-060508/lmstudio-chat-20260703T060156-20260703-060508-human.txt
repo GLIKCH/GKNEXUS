@@ -1,0 +1,18 @@
+Conversation: LM Studio Chat
+ID: lmstudio-chat-20260703T060156
+Model: google/gemma-4-e4b
+Created: 2026-07-03T06:04:35+00:00
+
+User (2026-07-03T06:04:32+00:00)
+this is a sample message saying hi from Joel the developer!
+
+Assistant (2026-07-03T06:04:32+00:00)
+Hi there! It's Joel, the developer!
+
+User (2026-07-03T06:04:32+00:00)
+can you give me a joke?
+
+Assistant (2026-07-03T06:04:35+00:00)
+Why don't scientists trust atoms?
+
+Because they make up everything!

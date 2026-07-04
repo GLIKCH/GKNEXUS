@@ -1,0 +1,12 @@
+{
+  "schema": "glikch.session.bundle.v1",
+  "conversation_id": "secure-token-smoke",
+  "created": "2026-07-03T08:38:38+00:00",
+  "agent_templates": "agent_templates.json",
+  "human_transcript": "secure-token-smoke-20260703-083838-human.txt",
+  "compact_memory": "secure-token-smoke-20260703-083838-llm.json",
+  "images": [],
+  "logs": [
+    "logs/2026-07-03.log"
+  ]
+}

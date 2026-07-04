@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "memorymanagement"
+version = "0.1.0"
+description = "Conversation memory manager for local LM Studio integration."
+readme = "MemoryManagement/README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML>=6.0",
+  "Flask>=3.0,<4.0",
+]
+
+[project.urls]
+Home = "https://example.com/memorymanagement"
+
+[project.scripts]
+memorymanagement = "MemoryManagement.cli:main"
+
+[tool.setuptools]
+packages = ["MemoryManagement"]

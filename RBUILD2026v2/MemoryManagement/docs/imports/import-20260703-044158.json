@@ -1,0 +1,23 @@
+{
+  "import_id": "import-20260703-044158",
+  "created": "2026-07-03T04:41:58+00:00",
+  "files": [
+    {
+      "filename": "lmstudio-chat-20260703T042145.md",
+      "extension": ".md",
+      "detected_format": "markdown",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "---\r\ntitle: LM Studio Chat\r\ncreated: '2026-07-03T04:38:59+00:00'\r\nparticipants:\r\n- user\r\n- assistant\r\nmodel: google/gemma-4-e4b\r\nmode: Chat\r\nagent_id: default-agent\r\nmessages:\r\n- role: user\r\n  content: hello my name is joel i will be performing a test now\r\n  timestamp: '2026-07-03T04:38:57+00:00'\r\n- role: assistant\r\n  content: Hello Joel!\r\n  timestamp: '2026-07-03T04:38:59+00:00'\r\n---\r\n\r\n# Messages\r\n\r\n**2026-07-03T04:38:57+00:00**\r\n\r\n## user\r\n\r\nhello my name is joel i will be performing a test now\r\n\r\n**2026-07-03T04:38:59+00:00**\r\n\r\n## assistant\r\n\r\nHello Joel!\r\n\r\n"
+        }
+      ],
+      "compact_memory": null,
+      "text_preview": "---\r\ntitle: LM Studio Chat\r\ncreated: '2026-07-03T04:38:59+00:00'\r\nparticipants:\r\n- user\r\n- assistant\r\nmodel: google/gemma-4-e4b\r\nmode: Chat\r\nagent_id: default-agent\r\nmessages:\r\n- role: user\r\n  content: hello my name is joel i will be performing a test now\r\n  timestamp: '2026-07-03T04:38:57+00:00'\r\n- role: assistant\r\n  content: Hello Joel!\r\n  timestamp: '2026-07-03T04:38:59+00:00'\r\n---\r\n\r\n# Messages\r\n\r\n**2026-07-03T04:38:57+00:00**\r\n\r\n## user\r\n\r\nhello my name is joel i will be performing a test now\r\n\r\n**2026-07-03T04:38:59+00:00**\r\n\r\n## assistant\r\n\r\nHello Joel!\r\n\r\n",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-044158\\lmstudio-chat-20260703T042145.md"
+    }
+  ]
+}

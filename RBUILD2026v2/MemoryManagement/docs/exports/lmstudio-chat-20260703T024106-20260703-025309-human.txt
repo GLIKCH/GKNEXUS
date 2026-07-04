@@ -1,0 +1,10 @@
+Conversation: LM Studio Chat
+ID: lmstudio-chat-20260703T024106
+Model: google/gemma-4-e4b
+Created: 2026-07-03T02:51:43+00:00
+
+User (2026-07-03T02:51:41+00:00)
+hello what loaded context do you have just loaded if any
+
+Assistant (2026-07-03T02:51:43+00:00)
+{}

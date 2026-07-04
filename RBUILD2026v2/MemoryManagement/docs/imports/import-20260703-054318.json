@@ -1,0 +1,111 @@
+{
+  "import_id": "import-20260703-054318",
+  "created": "2026-07-03T05:43:18+00:00",
+  "files": [
+    {
+      "filename": "agent_templates.json",
+      "extension": ".json",
+      "detected_format": "agent-templates",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Imported GLIKCH agent presets from this bundle."
+        }
+      ],
+      "compact_memory": null,
+      "text_preview": "[\n  {\n    \"name\": \"Verifier Agent\",\n    \"mode\": \"Developer\",\n    \"instruction\": \"test\"\n  },\n  {\n    \"name\": \"Unnamed Agent\",\n    \"mode\": \"Chat\",\n    \"instruction\": \"Execution policy: auto\"\n  },\n  {\n    \"name\": \"Smoke Agent\",\n    \"mode\": \"Developer\",\n    \"instruction\": \"test\"\n  }\n]",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-054318\\final-polish-smoke-20260703-054318-unzipped\\agent_templates.json"
+    },
+    {
+      "filename": "final-polish-smoke-20260703-054318-human.txt",
+      "extension": ".txt",
+      "detected_format": "plain-text",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Conversation: Final Polish Smoke\r\nID: final-polish-smoke\r\nModel: Unknown\r\nCreated: 2026-07-03T05:43:18+00:00\r\n\r\nUser (2026-07-03T05:43:18+00:00)\r\nhello\r\n\r\nAssistant (2026-07-03T05:43:18+00:00)\r\nhi\r\n"
+        }
+      ],
+      "compact_memory": null,
+      "text_preview": "Conversation: Final Polish Smoke\r\nID: final-polish-smoke\r\nModel: Unknown\r\nCreated: 2026-07-03T05:43:18+00:00\r\n\r\nUser (2026-07-03T05:43:18+00:00)\r\nhello\r\n\r\nAssistant (2026-07-03T05:43:18+00:00)\r\nhi\r\n",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-054318\\final-polish-smoke-20260703-054318-unzipped\\final-polish-smoke-20260703-054318-human.txt"
+    },
+    {
+      "filename": "final-polish-smoke-20260703-054318-llm.json",
+      "extension": ".json",
+      "detected_format": "glikch.memory.compact.v1",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hello",
+          "timestamp": "2026-07-03T05:43:18+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "hi",
+          "timestamp": "2026-07-03T05:43:18+00:00"
+        }
+      ],
+      "compact_memory": {
+        "schema": "glikch.memory.compact.v1",
+        "id": "final-polish-smoke",
+        "title": "Final Polish Smoke",
+        "model": null,
+        "created": "2026-07-03T05:43:18+00:00",
+        "resume_instruction": "Continue from this compressed memory. Preserve user goals, decisions, code context, unresolved errors, and next actions.",
+        "messages": [
+          {
+            "r": "u",
+            "t": "2026-07-03T05:43:18+00:00",
+            "c": "hello"
+          },
+          {
+            "r": "a",
+            "t": "2026-07-03T05:43:18+00:00",
+            "c": "hi"
+          }
+        ]
+      },
+      "text_preview": "{\n  \"schema\": \"glikch.memory.compact.v1\",\n  \"id\": \"final-polish-smoke\",\n  \"title\": \"Final Polish Smoke\",\n  \"model\": null,\n  \"created\": \"2026-07-03T05:43:18+00:00\",\n  \"resume_instruction\": \"Continue from this compressed memory. Preserve user goals, decisions, code context, unresolved errors, and next actions.\",\n  \"messages\": [\n    {\n      \"r\": \"u\",\n      \"t\": \"2026-07-03T05:43:18+00:00\",\n      \"c\": \"hello\"\n    },\n    {\n      \"r\": \"a\",\n      \"t\": \"2026-07-03T05:43:18+00:00\",\n      \"c\": \"hi\"\n    }\n  ]\n}",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-054318\\final-polish-smoke-20260703-054318-unzipped\\final-polish-smoke-20260703-054318-llm.json"
+    },
+    {
+      "filename": "manifest.json",
+      "extension": ".json",
+      "detected_format": "glikch.session.bundle.v1",
+      "status": "detected",
+      "messages": [],
+      "compact_memory": null,
+      "text_preview": "{\n  \"schema\": \"glikch.session.bundle.v1\",\n  \"conversation_id\": \"final-polish-smoke\",\n  \"created\": \"2026-07-03T05:43:18+00:00\",\n  \"agent_templates\": \"agent_templates.json\",\n  \"human_transcript\": \"final-polish-smoke-20260703-054318-human.txt\",\n  \"compact_memory\": \"final-polish-smoke-20260703-054318-llm.json\",\n  \"images\": [],\n  \"logs\": [\n    \"logs/2026-07-03.log\"\n  ]\n}",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-054318\\final-polish-smoke-20260703-054318-unzipped\\manifest.json"
+    },
+    {
+      "filename": "session_report.html",
+      "extension": ".html",
+      "detected_format": "source-code",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "<!doctype html>\r\n<html lang=\"en\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n    <title>Final Polish Smoke</title>\r\n    <style>\r\n      body { background: #070707; color: #f4eaea; font-family: Arial, sans-serif; padding: 24px; }\r\n      h1, h2, h3 { color: #ff838b; }\r\n      pre { white-space: pre-wrap; background: #050505; border: 1px solid #3a1717; border-radius: 8px; padding: 12px; }\r\n      section { margin: 16px 0; }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <h1>Final Polish Smoke</h1>\r\n    <h2>Bundle Manifest</h2>\r\n    <pre>{\r\n  \"schema\": \"glikch.session.bundle.v1\",\r\n  \"conversation_id\": \"final-polish-smoke\",\r\n  \"created\": \"2026-07-03T05:43:18+00:00\",\r\n  \"agent_templates\": \"agent_templates.json\",\r\n  \"human_transcript\": \"final-polish-smoke-20260703-054318-human.txt\",\r\n  \"compact_memory\": \"final-polish-smoke-20260703-054318-llm.json\",\r\n  \"images\": [],\r\n  \"logs\": [\r\n    \"logs/2026-07-03.log\"\r\n  ]\r\n}</pre>\r\n    <h2>Conversation</h2>\r\n    <section><h3>User</h3><pre>hello</pre></section>\r\n<section><h3>Assistant</h3><pre>hi</pre></section>\r\n  </body>\r\n</html>"
+        }
+      ],
+      "compact_memory": null,
+      "text_preview": "<!doctype html>\r\n<html lang=\"en\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n    <title>Final Polish Smoke</title>\r\n    <style>\r\n      body { background: #070707; color: #f4eaea; font-family: Arial, sans-serif; padding: 24px; }\r\n      h1, h2, h3 { color: #ff838b; }\r\n      pre { white-space: pre-wrap; background: #050505; border: 1px solid #3a1717; border-radius: 8px; padding: 12px; }\r\n      section { margin: 16px 0; }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <h1>Final Polish Smoke</h1>\r\n    <h2>Bundle Manifest</h2>\r\n    <pre>{\r\n  \"schema\": \"glikch.session.bundle.v1\",\r\n  \"conversation_id\": \"final-polish-smoke\",\r\n  \"created\": \"2026-07-03T05:43:18+00:00\",\r\n  \"agent_templates\": \"agent_templates.json\",\r\n  \"human_transcript\": \"final-polish-smoke-20260703-054318-human.txt\",\r\n  \"compact_memory\": \"final-polish-smoke-20260703-054318-llm.json\",\r\n  \"images\": [],\r\n  \"logs\": [\r\n    \"logs/2026-07-03.log\"\r\n  ]\r\n}</pre>\r\n    <h2>Conversation</h2>\r\n    <section><h3>User</h3><pre>hello</pre></section>\r\n<section><h3>Assistant</h3><pre>hi</pre></section>\r\n  </body>\r\n</html>",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-054318\\final-polish-smoke-20260703-054318-unzipped\\session_report.html"
+    }
+  ]
+}

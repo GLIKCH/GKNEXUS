@@ -1,0 +1,12 @@
+{
+  "schema": "glikch.session.bundle.v1",
+  "conversation_id": "07-03-26-ID-004",
+  "created": "2026-07-03T06:33:04+00:00",
+  "agent_templates": "agent_templates.json",
+  "human_transcript": "07-03-26-ID-004-20260703-063304-human.txt",
+  "compact_memory": "07-03-26-ID-004-20260703-063304-llm.json",
+  "images": [],
+  "logs": [
+    "logs/2026-07-03.log"
+  ]
+}

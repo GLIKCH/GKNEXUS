@@ -1,0 +1,12 @@
+{
+  "schema": "glikch.session.bundle.v1",
+  "conversation_id": "secure-recheck",
+  "created": "2026-07-03T08:39:49+00:00",
+  "agent_templates": "agent_templates.json",
+  "human_transcript": "secure-recheck-20260703-083949-human.txt",
+  "compact_memory": "secure-recheck-20260703-083949-llm.json",
+  "images": [],
+  "logs": [
+    "logs/2026-07-03.log"
+  ]
+}

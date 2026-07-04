@@ -1,0 +1,41 @@
+{
+  "users": [{ "id": "u-admin", "username": "glikch", "admin": 1, "createdAt": "2026-07-03T00:00:00.000Z" }],
+  "products": [
+    { "id": "gk-001", "title": "GLIKCH Field Kit", "description": "Starter kit concept for diagnostics, secure setup notes, cable discipline, and portable tech support essentials.", "price": 89.99, "rating": 4.8, "category": "GLIKCH Product Line", "brand": "GLIKCH", "type": "hardware", "availability": "preorder", "featured": true, "image": "/assets/placeholder.svg", "tags": ["kit", "support", "hardware"] },
+    { "id": "gk-002", "title": "Cyber Lab Notebook", "description": "A durable learning journal for labs, notes, threat models, build logs, and troubleshooting trails.", "price": 24.99, "rating": 4.6, "category": "Books", "brand": "GLIKCH EDU", "type": "book", "availability": "in-stock", "featured": true, "image": "/assets/placeholder.svg", "tags": ["education", "notes", "lab"] },
+    { "id": "gk-003", "title": "Intro to Secure Web Builds", "description": "Beginner-friendly course roadmap for building clean, secure web apps with practical DevSecOps habits.", "price": 49.0, "rating": 4.9, "category": "Courses", "brand": "GKEDU", "type": "course", "availability": "digital", "featured": true, "image": "/assets/placeholder.svg", "tags": ["course", "web", "security"] },
+    { "id": "gk-004", "title": "Retro Terminal Desk Mat", "description": "Cyberpunk workbench desk mat concept with quick-reference zones and old-school terminal flavor.", "price": 34.5, "rating": 4.5, "category": "Merch", "brand": "GLIKCH", "type": "merch", "availability": "in-stock", "featured": false, "image": "/assets/placeholder.svg", "tags": ["desk", "retro", "workspace"] },
+    { "id": "gk-005", "title": "Network Triage Checklist Pack", "description": "Printable and digital checklists for home, student, and small-office network troubleshooting.", "price": 12.0, "rating": 4.7, "category": "Software", "brand": "GLIKCH", "type": "software", "availability": "digital", "featured": false, "image": "/assets/placeholder.svg", "tags": ["network", "checklist", "support"] },
+    { "id": "gk-006", "title": "Robotics Tinker Bundle", "description": "Curated electronics and robotics learning bundle placeholder for future affiliate or direct products.", "price": 129.99, "rating": 4.4, "category": "Robotics/Electronics", "brand": "Affiliate Partner", "type": "hardware", "availability": "affiliate", "featured": false, "image": "/assets/placeholder.svg", "tags": ["robotics", "electronics", "learning"] }
+  ],
+  "services": [
+    { "id": "svc-security", "title": "Cybersecurity Review", "shortDescription": "Practical security checks for websites, small business systems, accounts, and workflows.", "icon": "SEC", "image": "/assets/placeholder.svg" },
+    { "id": "svc-repair", "title": "Computer Repair & Tune-Up", "shortDescription": "Diagnostics, cleanup, upgrade planning, and repair guidance for local and remote clients.", "icon": "FIX", "image": "/assets/placeholder.svg" },
+    { "id": "svc-web", "title": "Website & App Builds", "shortDescription": "Responsive business sites, landing pages, internal tools, and secure frontend/backend scaffolds.", "icon": "WEB", "image": "/assets/placeholder.svg" },
+    { "id": "svc-automation", "title": "Automation & AI Workflows", "shortDescription": "Custom automations, local AI workflow planning, documentation systems, and productivity tools.", "icon": "AI", "image": "/assets/placeholder.svg" },
+    { "id": "svc-edu", "title": "Tutoring & Tech Education", "shortDescription": "Beginner-friendly instruction for coding, cybersecurity, computer basics, and project setup.", "icon": "EDU", "image": "/assets/placeholder.svg" },
+    { "id": "svc-lab", "title": "Home Lab & Network Setup", "shortDescription": "Router, Wi-Fi, NAS, Docker, Linux, and cybersecurity lab planning for serious learners.", "icon": "LAB", "image": "/assets/placeholder.svg" }
+  ],
+  "faqs": [
+    { "id": "faq-remote", "question": "Do you work remotely?", "answer": "Yes. GLIKCH is primarily online and remote right now, with local focus around Burnsville, Asheville, NC, and surrounding areas.", "category": "support", "sortOrder": 1 },
+    { "id": "faq-products", "question": "Are all products sold directly by GLIKCH?", "answer": "Some products are GLIKCH concepts or direct offerings, while others may become affiliate, dropshipped, or partner marketplace items.", "category": "products", "sortOrder": 2 },
+    { "id": "faq-security", "question": "Can you help with cybersecurity safely and ethically?", "answer": "Yes. GLIKCH focuses on defensive, educational, and authorized security work only.", "category": "services", "sortOrder": 3 },
+    { "id": "faq-booking", "question": "What happens after I request a service?", "answer": "Your request is queued for review and can later be connected to email delivery, CRM, or ticketing automation.", "category": "support", "sortOrder": 4 }
+  ],
+  "banners": [
+    { "id": "home-main", "title": "Repair. Build. Secure. Automate.", "body": "Tech support from the timeline where the arcade kid became the cybersecurity engineer.", "ctaLabel": "Explore Services", "ctaTarget": "services", "active": true },
+    { "id": "product-drop", "title": "Nerd-grade gear, courses, and tools.", "body": "Cybersecurity hardware, education, merch, books, and affiliate-ready catalog structure.", "ctaLabel": "Browse Products", "ctaTarget": "products", "active": true }
+  ],
+  "process": [
+    { "id": "p1", "title": "Consultation", "body": "We start by understanding the goal, deadline, risk, and what success looks like." },
+    { "id": "p2", "title": "Diagnosis / Discovery", "body": "Systems, symptoms, code, or requirements are reviewed with practical notes and honest constraints." },
+    { "id": "p3", "title": "Planning", "body": "The work is broken into clear steps so cost, scope, and safety stay visible." },
+    { "id": "p4", "title": "Build / Repair / Secure", "body": "Implementation focuses on clean architecture, repeatable setup, and secure defaults." },
+    { "id": "p5", "title": "Testing", "body": "Changes are checked across devices and workflows before handoff." },
+    { "id": "p6", "title": "Delivery / Support", "body": "You get readable next steps, documentation, and support options after delivery." }
+  ],
+  "contactRequests": [],
+  "serviceBookings": [],
+  "siteBanners": [],
+  "contentBlocks": []
+}

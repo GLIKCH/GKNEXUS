@@ -1,0 +1,112 @@
+{
+  "import_id": "import-20260703-083838",
+  "created": "2026-07-03T08:38:38+00:00",
+  "files": [
+    {
+      "filename": "secure-token-smoke-20260703-083838-secure.zip",
+      "extension": ".zip",
+      "detected_format": "secure-bundle",
+      "status": "decrypted",
+      "messages": [],
+      "compact_memory": null,
+      "text_preview": "Secure bundle password accepted. Decrypted payload loaded.",
+      "image_ref": null,
+      "error": null
+    },
+    {
+      "filename": "agent_templates.json",
+      "extension": ".json",
+      "detected_format": "agent-templates",
+      "status": "detected",
+      "messages": [],
+      "compact_memory": null,
+      "text_preview": "Agent presets imported and deduplicated.",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-083838\\secure-token-smoke-20260703-083838-secure.zip-decrypted-unzipped\\agent_templates.json"
+    },
+    {
+      "filename": "manifest.json",
+      "extension": ".json",
+      "detected_format": "bundle-manifest",
+      "status": "detected",
+      "messages": [],
+      "compact_memory": null,
+      "text_preview": "- Bundle for conversation secure-token-smoke created 2026-07-03T08:38:38+00:00.\n- Human transcript: secure-token-smoke-20260703-083838-human.txt.\n- Compact memory: secure-token-smoke-20260703-083838-llm.json.\n- Logs included: 1.",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-083838\\secure-token-smoke-20260703-083838-secure.zip-decrypted-unzipped\\manifest.json"
+    },
+    {
+      "filename": "secure-token-smoke-20260703-083838-human.txt",
+      "extension": ".txt",
+      "detected_format": "plain-text",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Conversation: Secure Token Smoke\r\nID: secure-token-smoke\r\nModel: Unknown\r\nCreated: 2026-07-03T08:38:38+00:00\r\n\r\nUser (2026-07-03T08:38:38+00:00)\r\nhello secure context\r\n\r\nAssistant (2026-07-03T08:38:38+00:00)\r\nhello Joel\r\n"
+        }
+      ],
+      "compact_memory": null,
+      "text_preview": "Conversation: Secure Token Smoke\r\nID: secure-token-smoke\r\nModel: Unknown\r\nCreated: 2026-07-03T08:38:38+00:00\r\n\r\nUser (2026-07-03T08:38:38+00:00)\r\nhello secure context\r\n\r\nAssistant (2026-07-03T08:38:38+00:00)\r\nhello Joel\r\n",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-083838\\secure-token-smoke-20260703-083838-secure.zip-decrypted-unzipped\\secure-token-smoke-20260703-083838-human.txt"
+    },
+    {
+      "filename": "secure-token-smoke-20260703-083838-llm.json",
+      "extension": ".json",
+      "detected_format": "glikch.memory.compact.v1",
+      "status": "detected",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hello secure context",
+          "timestamp": "2026-07-03T08:38:38+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "hello Joel",
+          "timestamp": "2026-07-03T08:38:38+00:00"
+        }
+      ],
+      "compact_memory": {
+        "schema": "glikch.memory.compact.v1",
+        "id": "secure-token-smoke",
+        "title": "Secure Token Smoke",
+        "model": null,
+        "created": "2026-07-03T08:38:38+00:00",
+        "resume_instruction": "Continue from this compressed memory. Preserve user goals, decisions, code context, unresolved errors, and next actions.",
+        "messages": [
+          {
+            "r": "u",
+            "t": "2026-07-03T08:38:38+00:00",
+            "c": "hello secure context"
+          },
+          {
+            "r": "a",
+            "t": "2026-07-03T08:38:38+00:00",
+            "c": "hello Joel"
+          }
+        ]
+      },
+      "text_preview": "- Imported compressed chat: Secure Token Smoke (2026-07-03T08:38:38+00:00).\n- Continue from this compressed memory. Preserve user goals, decisions, code context, unresolved errors, and next actions.\n- User: hello secure context\n- Assistant: hello Joel",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-083838\\secure-token-smoke-20260703-083838-secure.zip-decrypted-unzipped\\secure-token-smoke-20260703-083838-llm.json"
+    },
+    {
+      "filename": "session_report.html",
+      "extension": ".html",
+      "detected_format": "session-report",
+      "status": "reference",
+      "messages": [],
+      "compact_memory": null,
+      "text_preview": "Session report detected and kept as a readable bundle reference, but not injected into LLM context.",
+      "image_ref": null,
+      "error": null,
+      "stored_path": "C:\\Users\\GLIKCH\\Desktop\\RBuild2026v2\\RBUILD2026v2\\MemoryManagement\\docs\\imports\\import-20260703-083838\\secure-token-smoke-20260703-083838-secure.zip-decrypted-unzipped\\session_report.html"
+    }
+  ]
+}
